@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+    <h1>Dasboard <small> Welcome {{session.username}}</small></h1>
+    if{% session.logged_in %}
+    <a class="btn btn-success" href="/logout">Logout</a>
+    <a class="btn btn-success" href="/add_article">Add article</a>
+    {% else %}
+
+    <h1>Please login</h1>
+    <a class="btn btn-success" href="/login">Add article</a>
+{% endblock %}
