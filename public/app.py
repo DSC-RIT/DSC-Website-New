@@ -2,7 +2,7 @@
 from flask import Flask, redirect, url_for,request,jsonify,render_template,flash,session;
 from firebase_admin import credentials, firestore, initialize_app;
 from flask_wtf import Form
-
+import uuid
 from functools import wraps
 from wtforms import Form,StringField,TextAreaField,PasswordField,validators,DateField;
 from datetime import datetime
@@ -41,7 +41,7 @@ def is_logged_in(f):
 
 @app.route('/')
 def hello():
-    return render_template('index.html')
+    return "Hello World!"
 
 class ArticleForm(Form):
 
@@ -68,9 +68,12 @@ def postEvent():
         venue = form.venue.data
         date = str(form.date.data)
         time = str(form.time.data)
+        idparam1 = title.replace(" ","")
+        id1 = idparam1+"-"+date
         eventData = {
             "title":title,
             "date":date,
+            "id":id1,
             "time":time,
             "image_url":image_url,
             "venue":venue,
@@ -174,8 +177,8 @@ def articles_year(year):
         
 
 #This is for opening up a specific artcile.
-@app.route('/article/<string:year>/<string:id>')
-def article1(year,id):
+@app.route('/article/<string:year>/<string:id1>')
+def article1(year,id1):
     all_posts = [doc.to_dict() for doc in events.stream()]
     post_2017 = []
     post_2018 = []
@@ -215,12 +218,12 @@ def article1(year,id):
     else:
         print("Maintenance required")     
         eventsData = jsonify([{}])
-
     for event in eventsData:
-        if event['id'] == id:
+        print(event)
+        if str(event['id']) == str(id1):
             sendEvent = event
             break
-
+    # return "Hello world"
     return render_template('article.html',event=sendEvent)
 
 
