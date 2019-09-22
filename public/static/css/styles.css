@@ -17,6 +17,9 @@ body {
   font-weight: normal;
   letter-spacing: -.3px;
 }
+.event {
+margin-top: 80px;
+}
 
 .has-sticky-header {
   padding-top: 72px;

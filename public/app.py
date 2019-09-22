@@ -47,6 +47,11 @@ def hello():
 def team():
     return render_template('team.html')
 
+# Event Page
+@app.route('/event')
+def event():
+    return render_template('event.html')
+
 class ArticleForm(Form):
 
     title = StringField('Title',[validators.length(min=1,max=50)])
