@@ -54,8 +54,10 @@ def team():
 @app.route('/photos')
 def photos():
     return render_template('photos.html')
-# @app.route('/events2019')
-# def events2019():
+
+@app.route('/doc')
+def doc():
+    return render_template('doc.html')
 
 
 
