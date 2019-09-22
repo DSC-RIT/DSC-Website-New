@@ -1,0 +1,40 @@
+
+    {% for event in events  %}
+    {% if loop.index0 % 3 == 0 %}
+    <div class="row">
+    {% endif %}
+
+
+    <div class="col-md-4 col-12">
+        <div class="card event-card wow fadeInUp">
+            <img alt="Event two poster" class="card-img-top" data-src="{{url_for('static',filename='images/assets/events/android.png')}}">
+            <div class="card-body">
+                <h5 class="card-title">{{event.title}}</h5>
+
+                <table>
+                    <tr>
+                        <td width="15%" class="text-blue"><i class="far fa-calendar-alt"></i></td>
+                        <td>{{event.date}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-red"><i class="fas fa-map-marker-alt"></i></td>
+                        <td>{{event.venue}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-green"><i class="far fa-clock"></i></td>
+                        <td>{{event.time}}</td>
+                    </tr>
+                </table>
+
+                <a href="" class="button float-right">View more..</a>
+            </div>
+        </div>
+    </div>
+    {% if loop.index0 % 3 == 2 or loop.last %}
+    </div>
+    {% endif %}
+  {% endfor %}
+
+
+
+  <a class="button float-right" href="/article/{{year}}/{{event.id}}">View more</a>
