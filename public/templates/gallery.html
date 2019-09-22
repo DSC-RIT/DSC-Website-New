@@ -1,0 +1,26 @@
+{%  extends 'layout.html' %}
+{% block body %}
+<h1>Event Gallery</h1><br><br>
+<h4>Photos of the Event:</h4><br>
+    {% for i in range(eventDate|length)%}
+    <h3>{{eventName[i]}}{{eventDate[i]}}</h3> <hr>   
+{% for url in eventUrls[i]  %}
+{% if loop.index0 % 3 == 0 %}
+<div class="row">
+{% endif %}
+<div class="col-md-4 col-12">
+    <div class="card event-card wow fadeInUp">
+        <img alt="Event two poster" class="card-img-top" src="{{url}}" width="140" height="300">
+    </div>
+</div>
+{% if loop.index0 % 3 == 2 or loop.last %}
+</div>
+{% endif %}
+{% endfor %}
+<hr>
+{% endfor %}        
+
+{% endblock %}
+  
+      
+{% include './includes/footer.html' %}

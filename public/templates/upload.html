@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,7 +23,7 @@
     <link rel="stylesheet" href="{{url_for('static',filename='css/styles.css')}}">
     <link rel="stylesheet" href="{{url_for('static',filename='css/responsive.css')}}">
     <link  rel="stylesheet"href="{{url_for('static',filename='css/animate.css')}}"> 
-    <!--  preloader -->
+
     <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/pace-theme.css')}}">
     <script src="{{url_for('static',filename='js/wow.min.js')}}"></script>
     <script>
@@ -30,7 +31,6 @@
     </script>
 
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-144538640-2"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -78,9 +78,7 @@ a.dropdown-item{
                     <li class="nav-item"><a href="/#technologies" class="nav-link">Technologies</a></li>
                     <li class="nav-item"><a href="/#workshops" class="nav-link">Workshops</a></li>
                     <li class="nav-item"><a href="/team" class="nav-link">Team</a></li>
-                    <li class="nav-item"><a href="/gallery" class="nav-link">Gallery</a></li>
                     <li class="nav-item dropdown">
-                            <!-- <div class="dropdown"> -->
                                     <a class=" dropdown-toggle nav-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                       Events
                                     </a>
@@ -88,13 +86,32 @@ a.dropdown-item{
                                       <a class="dropdown-item" href="/articles_filter/2019">2019</a>
                                       <a class="dropdown-item" href="/articles_filter/2018">2018</a>
                                     </div>
-                                  <!-- </div>  -->
                     </li>
                 </ul>
-                <!-- <div class="custom-menu__right">
-                    <a href="http://meetu.ps/c/3q6jR/zjdKV/f" class="event-btn" rel="noreferrer" target="_blank">Next
-                        Event</a>
-                </div> -->
+                
             </div>
         </div>
     </nav>
+    <hr>
+    <div class="container" style="border:5px solid white;padding:40px;margin-top:50px;">
+        <form action="" method="POST" enctype="multipart/form-data">
+            Name of the Event:<br><br>  
+            <input style="margin-bottom:15px" type="text" name="event-name"><br>
+            <hr>
+            Date of the Event:<br><br>
+            <input style="margin-bottom:15px" type="date" id="start" name="event-date"><br>
+            <hr><input type="file" name="images" multiple><br><br>
+            <input value="Upload" class="btn btn-primary" style="border-radius:10px" type="submit">
+        </form>
+    </div>
+    <script src="{{url_for('static',filename='js/vendors/pace.js')}}"></script>
+    <script src="{{url_for('static',filename='js/vendors/jquery.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/vendors/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/vendors/jquery.magnific-popup.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/vendors/jquery.easing.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/vendors/swiper.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/vendors/owl.carousel.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/custom.js')}}"></script>
+    <script src="{{url_for('static',filename='js/custom.js')}}"></script>
+</body>
+</html>
