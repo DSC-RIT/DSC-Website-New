@@ -4,6 +4,7 @@ from firebase_admin import credentials, firestore, initialize_app;
 from flask_wtf import Form
 import pdfkit
 import uuid
+import datetime
 from functools import wraps
 from wtforms import Form,StringField,TextAreaField,PasswordField,validators,DateField;
 from datetime import datetime
@@ -107,6 +108,7 @@ def postEvent():
             "title":title,
             "date":date,
             "id":id1,
+            "timestamp":timestamp,
             "time":time,
             "image_url":image_url,
             "venue":venue,
@@ -180,8 +182,12 @@ def dashboard():
 @app.route('/delete_article/<string:id>',methods=['POST'])
 @is_logged_in
 def delete_article(id):
-    db.collection(u'Events').document(id).delete()
-    flash('Article Deleted','success')
+    try:
+        db.collection(u'Events').document(id).delete()
+        flash('Post Deleted','success')
+        return redirect(url_for('dashboard'))
+    except:
+        flash('Some error occured')     
 #Now, this route will get the acticles of 2019.
 @app.route('/articles_filter/<string:year>/')
 def articles_year(year):
@@ -277,6 +283,75 @@ def article1(year,id1):
             break
     # return "Hello world"
     return render_template('article.html',event=sendEvent)
+
+
+
+@app.route('/edit_post/<string:id>/<string:timestamp>',methods=['GET','POST'])
+@is_logged_in
+def edit_article(id,timestamp):
+
+    form = ArticleForm(request.form)
+    #Gets what the user edited basically.
+
+    article = db.collection(u'Events').document(timestamp).get()
+    article = article.to_dict()
+    if request.method == 'GET':    
+        form.title.data = article['title']
+        form.body.data = article['body']
+        form.image_url.data = article['image_url']
+        form.venue.data = article['venue']
+        
+    if request.method == 'POST':
+        
+        title = form.title.data
+        body = form.body.data
+        image_url = form.image_url.data
+        venue = form.venue.data
+        idparam1 = title.replace(" ","")
+        date = article['date']
+        time = article['time']
+        id1 = idparam1+"-"+date
+
+        print(body)
+
+        try: 
+            pdfkit.from_string(body,'genReport.pdf')
+            pdfkit.from_string(body,'genReport.docx')
+            report =  str(title)+"-"+str(date)
+            storage.child('reportsPdf/{}'.format(report)).put('genReport.pdf')
+            storage.child('reportsDocx/{}'.format(report)).put('genReport.docx')
+            pdf_url = storage.child('reportsPdf/{}'.format(report)).get_url(None)
+            docx_url = storage.child('reportsDocx/{}'.format(report)).get_url(None)
+        except:
+            pdf_url = ""
+            docx_url = ""
+
+        eventData = {
+            "title":title,
+            "date":date,
+            "id":id1,
+            "timestamp":timestamp,
+            "time":time,
+            "image_url":image_url,
+            "venue":venue,
+            "body":body,
+            "pdf_url":pdf_url,
+            "docx_url":docx_url
+        }
+
+        res = events.document(timestamp).set(eventData)
+        data = {
+            "message":"event_updated(This will return previous timestamp only",
+            "timestamp": timestamp
+        }
+        flash('Article Updated','success')
+        return data
+
+        # return redirect(url_for('dashboard'))
+
+    return render_template('edit_article.html',form=form)
+
+
 
 
 if __name__ == '__main__':
