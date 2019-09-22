@@ -3,12 +3,17 @@
 <h1>{{event.title}}</h1>
 <div class="card-body">
     <h5 class="card-title">{{event.title}}</h5>
-    <p class="card-text">{{event.content}}</p>
+    <div class="container">
+        {{event.body | safe}}
+    </div>
   </div>
+  {{event.pdf_url}}
   <ul class="list-group list-group-flush">
     <li class="list-group-item">Venue:{{ event.venue }}</li>
     <li class="list-group-item">Time:{{ event.time }}</li>
     <li class="list-group-item">Date:{{ event.date }}</li>
+    <a href="{{event.pdf_url}}">Download pdf-report</a>
+    <a href="{{event.docx_url}}">Download word-report</a>
   </ul>
   <div class="card-body">
 <hr>
