@@ -1,10 +1,29 @@
-{% extends 'layout.html' %}
-
+{% include './includes/_navbar.html' %}
 {% block body %}
+<div class = "container ">
+    <div class = "events container">
+            <section id="workshops" class="section-spacer workshops-section">
+        <div class="container">
+            <header class="section-header text-center">
+                <h2 class="section-title wow fadeInUp">Welcome {{session.username.lower()}}</h2>
+                <p class="section-subtitle wow fadeInUp"></p>
+            </header>
 
-    <h1>Dasboard <small> Welcome {{session.username}}</small></h1>
-    <a class="btn btn-success" href="/logout">Logout</a>
-    <a class="btn btn-success" href="/add_article">Add article</a><br>
+            <div class="workshops-type-switch">
+                <ul class="nav nav-pills justify-content-center js-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#upcoming">Past Events</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-content">
+                <div class="tab-pane active" id="upcoming" role="tabpanel" aria-labelledby="upcoming">
+                    <div class="row">
+
+
+    <h1>Dasboard</h1>
+	<a class="btn btn-success" href="/add_article" style = " position: relative; left: 609px; bottom: 4px;">Add article</a><br>
+    <a class="btn btn-success" href="/logout" style = "position: relative; left: 631px; bottom: 4px;">Logout</a>
     <hr>
     <table class="table table-striped">
     <tr>
@@ -23,6 +42,7 @@
             <td>
                 <form action="{{url_for('delete_article',id=doc.timestamp)}}" method="post">
                     <input type="submit" value="Delete" class="btn btn-danger">
+
                 </form>
             </td>
         </tr>
@@ -30,4 +50,5 @@
 
     {% endfor %}
 </table>
-    {% endblock %}
+    {%endblock%}
+    {% include './includes/footer.html' %}

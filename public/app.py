@@ -1,4 +1,4 @@
-
+    
 from flask import Flask, redirect, url_for,request,jsonify,render_template,flash,session;
 from firebase_admin import credentials, firestore, initialize_app;
 from flask_wtf import Form
@@ -44,8 +44,22 @@ def is_logged_in(f):
 
 
 @app.route('/')
-def hello():
-    return "Hello World!"
+def index():
+    return render_template('index.html')
+
+@app.route('/team')
+def team():
+    return render_template('team.html')
+
+# Event Page
+@app.route('/event')
+def event():
+    return render_template('event.html')
+
+# Events Page
+@app.route('/events')
+def events():
+    return render_template('events.html')
 
 class ArticleForm(Form):
 
