@@ -5,7 +5,7 @@
             <section id="workshops" class="section-spacer workshops-section">
         <div class="container">
             <header class="section-header text-center">
-                <h2 class="section-title wow fadeInUp">Welcome to the admin Dashboard!</h2>
+                <h2 class="section-title wow fadeInUp">Welcome {{session.username.lower()}}</h2>
                 <p class="section-subtitle wow fadeInUp"></p>
             </header>
 
@@ -21,9 +21,9 @@
                     <div class="row">
 
 
-    <h1>Dasboard <small> Welcome&nbsp&nbsp&nbsp{{session.username}}</small></h1>
-    <a class="btn btn-success" href="/logout" style = "margin-left:150px">Logout</a>
-    <a class="btn btn-success" href="/add_article" style = "margin-left:10px">Add article</a><br>
+    <h1>Dasboard</h1>
+	<a class="btn btn-success" href="/add_article" style = " position: relative; left: 609px; bottom: 4px;">Add article</a><br>
+    <a class="btn btn-success" href="/logout" style = "position: relative; left: 631px; bottom: 4px;">Logout</a>
     <hr>
     <table class="table table-striped">
     <tr>
@@ -38,11 +38,11 @@
             <td>{{doc.id}}</td>
             <td>{{doc.title}}</td>
             <td>{{doc.date}}</td>
-            <td><a href="edit_post/{{doc.id}}"  class="btn btn-info pull-right">Edit</a></td>
+            <td><a href="edit_post/{{doc.id}}"  class="btn btn-info pull-right"style = "position: relative;left: 87px;">Edit</a></td>
             <td>
                 <form method="POST">
                         <form action="{{url_for('delete_article', id=doc.id)}}" method="post">
-                    <input type="submit" value="Delete" class="btn btn-danger">
+                    <input type="submit" value="Delete" class="btn btn-danger"style = "    position: relative;left: 54px;">
                 </form>
             </td>
         </tr>
@@ -51,3 +51,4 @@
     {% endfor %}
 </table>
     {%endblock%}
+    {% include './includes/footer.html' %}
