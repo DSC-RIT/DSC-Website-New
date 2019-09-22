@@ -2,6 +2,7 @@
 from flask import Flask, redirect, url_for,request,jsonify,render_template,flash,session;
 from firebase_admin import credentials, firestore, initialize_app;
 from flask_wtf import Form
+import pdfkit
 import uuid
 from functools import wraps
 from wtforms import Form,StringField,TextAreaField,PasswordField,validators,DateField;
@@ -24,6 +25,8 @@ config = {
 default_app = initialize_app(cred)
 db = firestore.client()
 firebase = pyrebase.initialize_app(config)
+
+storage = firebase.storage()
 events  = db.collection('Events')
 auth = firebase.auth()
 
@@ -84,6 +87,36 @@ def postEvent():
         time = str(form.time.data)
         idparam1 = title.replace(" ","")
         id1 = idparam1+"-"+date
+        options = {
+            'page-size': 'Letter',
+            'margin-top': '0.75in',
+            'margin-right': '0.75in',
+            'margin-bottom': '0.75in',
+            'margin-left': '0.75in',
+            'encoding': "UTF-8",
+            'custom-header' : [
+                ('Accept-Encoding', 'gzip')
+            ],
+            'cookie': [
+                ('cookie-name1', 'cookie-value1'),
+                ('cookie-name2', 'cookie-value2'),
+            ],
+            'no-outline': None
+        }
+        
+
+        try: 
+            pdfkit.from_string(body,'genReport.pdf')
+            pdfkit.from_string(body,'genReport.docx')
+            report =  str(title)+"-"+str(date)
+            storage.child('reportsPdf/{}'.format(report)).put('genReport.pdf')
+            storage.child('reportsDocx/{}'.format(report)).put('genReport.docx')
+            pdf_url = storage.child('reportsPdf/{}'.format(report)).get_url(None)
+            docx_url = storage.child('reportsDocx/{}'.format(report)).get_url(None)
+        except:
+            pdf_url = ""
+            docx_url = ""
+        print(pdf_url)
         eventData = {
             "title":title,
             "date":date,
@@ -91,10 +124,15 @@ def postEvent():
             "time":time,
             "image_url":image_url,
             "venue":venue,
-            "body":body
+            "body":body,
+            "pdf_url":pdf_url,
+            "docx_url":docx_url
         }
-        
+
         res = events.document(timestamp).set(eventData)
+
+
+
 
         data = {
             "message":"event_added",
@@ -142,8 +180,22 @@ def logout():
     flash('You are now logged out','success')
     return "Hello world"
 
+@app.route('/dashboard')
+#Allowed only if logged in.
+@is_logged_in
+def dashboard():
+    docs = db.collection('Events').stream()
+    docsArr = []
+    for doc in docs:
+        docsArr.append(doc.to_dict())
+    return render_template('dashboard.html',docs=docsArr)
 
 
+@app.route('/delete_article/<string:id>',methods=['POST'])
+@is_logged_in
+def delete_article(id):
+    db.collection(u'Events').document(id).delete()
+    flash('Article Deleted','success')
 #Now, this route will get the acticles of 2019.
 @app.route('/articles_filter/<string:year>/')
 def articles_year(year):
