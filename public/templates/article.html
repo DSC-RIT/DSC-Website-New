@@ -1,4 +1,4 @@
-{%  extends 'layout.html' %}
+{% include './includes/_navbar.html' %}
 {% block body %}
       <div class = "event container">
           <h1>{{event.title}}</h1><hr>
@@ -17,9 +17,9 @@
         
       
         </div>
-{% include './includes/footer.html' %}
-<hr>
+
 
 {% endblock %}
+{% include './includes/footer.html' %}
 
 
