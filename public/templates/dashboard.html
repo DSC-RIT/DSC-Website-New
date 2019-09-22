@@ -1,6 +1,24 @@
-{% extends 'layout.html' %}
+{% include './includes/_navbar.html' %}
+<div class = "container ">
+    <div class = "events container">
+            <section id="workshops" class="section-spacer workshops-section">
+        <div class="container">
+            <header class="section-header text-center">
+                <h2 class="section-title wow fadeInUp">Welcome to the admin Dashboard!</h2>
+                <p class="section-subtitle wow fadeInUp"></p>
+            </header>
 
-{% block body %}
+            <div class="workshops-type-switch">
+                <ul class="nav nav-pills justify-content-center js-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#upcoming">Past Events</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-content">
+                <div class="tab-pane active" id="upcoming" role="tabpanel" aria-labelledby="upcoming">
+                    <div class="row">
+
 
     <h1>Dasboard <small> Welcome {{session.username}}</small></h1>
     <a class="btn btn-success" href="/logout">Logout</a>
