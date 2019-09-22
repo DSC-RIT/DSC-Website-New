@@ -40,7 +40,7 @@ def is_logged_in(f):
 
 
 @app.route('/')
-def hello():
+def index():
     return render_template('index.html')
 
 @app.route('/team')
@@ -51,6 +51,11 @@ def team():
 @app.route('/event')
 def event():
     return render_template('event.html')
+
+# Events Page
+@app.route('/events')
+def events():
+    return render_template('events.html')
 
 class ArticleForm(Form):
 
