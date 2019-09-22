@@ -1,13 +1,122 @@
-{% extends 'layout.html' %}
+{% include './includes/_navbar.html' %}
+<div class = "container ">
+    <div class = "events container">
+            <section id="workshops" class="section-spacer workshops-section">
+        <div class="container">
+            <header class="section-header text-center">
+                <h2 class="section-title wow fadeInUp">Welcome to the admin Dashboard!</h2>
+                <p class="section-subtitle wow fadeInUp"></p>
+            </header>
 
-{% block body %}
+            <div class="workshops-type-switch">
+                <ul class="nav nav-pills justify-content-center js-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#upcoming">Past Events</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-content">
+                <div class="tab-pane active" id="upcoming" role="tabpanel" aria-labelledby="upcoming">
+                    <div class="row">
 
-    <h1>Dasboard <small> Welcome {{session.username}}</small></h1>
-    if{% session.logged_in %}
-    <a class="btn btn-success" href="/logout">Logout</a>
-    <a class="btn btn-success" href="/add_article">Add article</a>
-    {% else %}
+                        <div class="col-md-4 col-12">
+                            <div class="card event-card wow fadeInUp">
+                                <img alt="Event one poster" class="card-img-top" data-src="{{url_for('static',filename='images/assets/events/cloud.gif')}}">
+                                <div class="card-body">
+                                    <p class="tagging intermediate float-right">Intermediate</p>
+                                    <h5 class="card-title">Cloud Study Jam</h5>
 
-    <h1>Please login</h1>
-    <a class="btn btn-success" href="/login">Add article</a>
-{% endblock %}
+                                    <table>
+                                        <tr>
+                                            <td width="15%" class="text-blue"><i class="far fa-calendar-alt"></i></td>
+                                            <td>20<sup>th</sup> April 2019</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-red"><i class="fas fa-map-marker-alt"></i></td>
+                                            <td>LH 20, Main Campus</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td class="text-green"><i class="far fa-clock"></i></td>
+                                            <td>0900hrs - 1200hrs</td>
+                                        </tr>
+                                    </table>
+
+                                    <a class="button float-right" href="#">View</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-12">
+                            <div class="card event-card wow fadeInUp">
+                                <img alt="Event two poster" class="card-img-top" data-src="{{url_for('static',filename='images/assets/events/android.png')}}">
+                                <div class="card-body">
+                                    <p class="tagging beginner float-right">Beginner</p>
+                                    <h5 class="card-title">Applied CS</h5>
+
+                                    <table>
+                                        <tr>
+                                            <td width="15%" class="text-blue"><i class="far fa-calendar-alt"></i></td>
+                                            <td>6<sup>th</sup> May 2019</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-red"><i class="fas fa-map-marker-alt"></i></td>
+                                            <td>LH 20, Main Campus</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-green"><i class="far fa-clock"></i></td>
+                                            <td>0900hrs - 1400hrs</td>
+                                        </tr>
+                                    </table>
+
+                                    <a href="https://www.meetup.com/GDG-Kisii/events/258288819/" class="button float-right">View</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-12">
+                            <div class="card event-card wow fadeInUp">
+                                <img alt="Event three poster" class="card-img-top" data-src="{{url_for('static',filename='images/assets/events/flutter.png')}}">
+                                <div class="card-body">
+                                    <p class="tagging expert float-right">Expert</p>
+                                    <h5 class="card-title">Explore ML</h5>
+
+                                    <table>
+                                        <tr>
+                                            <td width="15%" class="text-blue"><i class="far fa-calendar-alt"></i></td>
+                                            <td>22<sup>nd</sup> May 2019</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-red"><i class="fas fa-map-marker-alt"></i></td>
+                                            <td>LH 20, Main Campus</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td class="text-green"><i class="far fa-clock"></i></td>
+                                            <td>1800hrs - 1930hrs</td>
+                                        </tr>
+                                    </table>
+
+                                    <a href="https://www.meetup.com/GDG-Kisii/events/258212444/" class="button float-right">View</a>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="tab-pane" id="past" role="tabpanel" aria-labelledby="past">
+
+
+
+
+                </div>
+            </div>
+        </div>
+        </section>
+    <section class="section-spacer african2 vanish">
+        <div class="container">
+
+
+	</div>
+</div>
