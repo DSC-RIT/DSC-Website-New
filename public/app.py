@@ -60,11 +60,6 @@ def event():
 def events():
     return render_template('events.html')
 
-@app.route('/dashboard')
-# @is_logged_in
-def dashboard():
-    return render_template('dashboard.html')
-
 class ArticleForm(Form):
 
     title = StringField('Title',[validators.length(min=1,max=50)])
