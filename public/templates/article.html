@@ -1,0 +1,15 @@
+{%  extends 'layout.html' %}
+{% block body %}
+<h1>{{event.title}}</h1>
+<div class="card-body">
+    <h5 class="card-title">{{event.title}}</h5>
+    <p class="card-text">{{event.content}}</p>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">Venue:{{ event.venue }}</li>
+    <li class="list-group-item">Time:{{ event.time }}</li>
+    <li class="list-group-item">Date:{{ event.date }}</li>
+  </ul>
+  <div class="card-body">
+<hr>
+{% endblock %}

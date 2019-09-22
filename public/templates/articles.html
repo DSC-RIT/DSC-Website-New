@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+{% block body %}
+    <h1>Articles</h1>
+    <ul class="list-group list-group-flush">
+    {% for event in events %}
+    <div class="card" style="width: 18rem;">
+        <img src={{event.image_url}} class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">{{event.title}}</h5>
+          <p class="card-text">{{event.content}}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Venue:{{ event.venue }}</li>
+          <li class="list-group-item">Time:{{ event.time }}</li>
+          <li class="list-group-item">Date:{{ event.date }}</li>
+        </ul>
+        <div class="card-body">
+          <a href="/article/{{year}}/{{event.id}}" class="card-link">View more</a>
+        </div>
+      </div>
+   {% endfor %}
+</ul>  
+{% endblock %}
