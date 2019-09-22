@@ -51,12 +51,14 @@ def index():
 def team():
     return render_template('team.html')
 
-# @app.route('/events2019')
-# def events2019():
+@app.route('/photos')
+def photos():
+    return render_template('photos.html')
 
 @app.route('/doc')
 def doc():
     return render_template('doc.html')
+
 
 
 class ArticleForm(Form):
