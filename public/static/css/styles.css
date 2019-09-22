@@ -17,9 +17,7 @@ body {
   font-weight: normal;
   letter-spacing: -.3px;
 }
-.event {
-margin-top: 80px;
-}
+
 
 .has-sticky-header {
   padding-top: 72px;
@@ -105,7 +103,7 @@ p {
 }
 
 .zuri {
-    font-family: 'Google Sans Medium', sans-serif;
+  font-family: 'Google Sans Medium', sans-serif;
 }
 
 .text-warning {
@@ -124,6 +122,9 @@ p {
   padding-left: 20px;
 }
 
+.event {
+margin-top: 80px;
+}
 .section-spacer {
   padding: 70px 0;
 }
