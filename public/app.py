@@ -2,6 +2,8 @@
 from flask import Flask, redirect, url_for,request,jsonify,render_template,flash,session;
 from firebase_admin import credentials, firestore, initialize_app;
 from flask_wtf import Form
+import re
+from requests import Response
 import pdfkit
 import uuid
 import datetime
@@ -26,7 +28,7 @@ config = {
 default_app = initialize_app(cred)
 db = firestore.client()
 firebase = pyrebase.initialize_app(config)
-
+db1 = firebase.database()
 storage = firebase.storage()
 events  = db.collection('Events')
 auth = firebase.auth()
@@ -39,7 +41,7 @@ def is_logged_in(f):
             return f(*args,**kwargs)
         else:
             flash('Unauthorized, Please login','danger')
-            return redirect(url_for('login'))
+            return redirect('/admin')
     return wrap
 
 
@@ -51,13 +53,8 @@ def index():
 def team():
     return render_template('team.html')
 
-@app.route('/photos')
-def photos():
-    return render_template('photos.html')
-
-@app.route('/doc')
-def doc():
-    return render_template('doc.html')
+# @app.route('/events2019')
+# def events2019():
 
 
 
@@ -72,7 +69,7 @@ class ArticleForm(Form):
 
 
 # This route is regarding the event posting.
-@app.route('/post-event',methods=['POST','GET'])
+@app.route('/add_article',methods=['POST','GET'])
 @is_logged_in
 def postEvent():
     form  = ArticleForm(request.form)
@@ -148,7 +145,7 @@ def postEvent():
 
 #This route will be regarding user sign in
 
-@app.route('/login',methods=['GET','POST'])
+@app.route('/admin',methods=['GET','POST'])
 def login():
     if request.method == 'POST':
 
@@ -160,11 +157,10 @@ def login():
             flash('Login Successful','success')
             session['logged_in'] = True
             session['username'] = username
-            return render_template('add_article.html')
+            return redirect('/dashboard')
             
         except:
             flash('Please check your credentials')
-
     #The below goes if it is a get request.
     return render_template('login.html')
 
@@ -180,7 +176,7 @@ def login():
 def logout():
     session.clear() #We just have to clear the session, this will automatically set it to false.
     flash('You are now logged out','success')
-    return "Hello world"
+    return render_template('login.html')
 
 @app.route('/dashboard')
 #Allowed only if logged in.
@@ -364,6 +360,46 @@ def edit_article(id,timestamp):
         # return redirect(url_for('dashboard'))
 
     return render_template('edit_article.html',form=form)
+
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_image():
+    if request.method == 'GET':
+        return render_template('upload.html')
+    else:
+        images = request.files
+        details = request.form.to_dict()
+        name = details['event-name']
+        date = details['event-date']
+
+        images = images.getlist('images')
+
+        links = []
+
+        for i in range(len(images)):
+            image_name = str(images[i]).split()[1].strip("'")
+            print("Uploading image %d" % i)
+            storage.child('images/{}'.format(name + "/" + image_name)).put(images[i])
+            links.append(storage.child('images/{}'.format(name + "/" + image_name)).get_url(None))
+        json = {'urls': tuple(i for i in links)}
+        urlArr = [i for i in links]
+        db1.child('image_urls').child(name + " " + date).set(urlArr)
+        
+        return redirect('/dashboard')
+
+@app.route('/gallery',methods=['GET'])
+def showImages():
+    allData = db1.child('image_urls').get().val()
+    eventUrls = []
+    eventName = []
+    eventDate = []
+    for event,urls in allData.items():
+        x = len(event)
+        eventName.append(event[:-10])
+        eventDate.append(event[-10:])
+        eventUrls.append(urls)
+        print(urls)
+    return render_template('gallery.html',eventDate=eventDate,eventName=eventName,eventUrls=eventUrls)
+
 
 
 

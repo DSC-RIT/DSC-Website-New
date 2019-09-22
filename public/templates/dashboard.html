@@ -1,18 +1,41 @@
-{% extends 'layout.html' %}
-
+{% include './includes/_navbar.html' %}
 {% block body %}
+<div class = "container ">
+    <div class = "events container">
+            <section id="workshops" class="section-spacer workshops-section">
+        <div class="container">
+            <header class="section-header text-center">
+                <h2 class="section-title wow fadeInUp">Welcome {{session.username.lower()}}</h2>
+                <p class="section-subtitle wow fadeInUp"></p>
+            </header>
 
-    <h1>Dasboard <small> Welcome {{session.username}}</small></h1>
+            <div class="workshops-type-switch">
+                <ul class="nav nav-pills justify-content-center js-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#upcoming">Past Events</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-content">
+                <div class="tab-pane active" id="upcoming" role="tabpanel" aria-labelledby="upcoming">
+                    <div class="row">
+
+
+    <h1>Dasboard</h1>
+    <div style = "position: relative;left: 317px;padding-bottom: 6px;">
+    <a class="btn btn-success" href="/add_article" style="margin-right:9px ">Add article</a>
+    <a class="btn btn-success" href="/upload" style="margin-right:9px">Add Photos</a>
+    <a class="btn btn-success" href="/" style="margin-right:9px ">Add Upcoming Events</a>
     <a class="btn btn-success" href="/logout">Logout</a>
-    <a class="btn btn-success" href="/add_article">Add article</a><br>
-    <hr>
+    </div>
+
     <table class="table table-striped">
     <tr>
             <th>ID</th>
             <th>Title</th>
             <th>Date</th>
-            <th></th>
-            <th></th>
+            <th>Edit</th>
+            <th>Delete</th>
      </tr>
     {% for doc in docs %}
     <tr>
@@ -29,9 +52,7 @@
         </tr>
 
     {% endfor %}
-</table>
-
-
-  {% endblock %}
+    </table>
+{% endblock %}
 {% include './includes/footer.html' %}
 

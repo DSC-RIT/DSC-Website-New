@@ -94,16 +94,24 @@ a.dropdown-item{
     </nav>
     <hr>
     <div class="container" style="border:5px solid white;padding:40px;margin-top:50px;">
-        <form action="/" method="post" enctype="multipart/form-data">
+        <form action="" method="POST" enctype="multipart/form-data">
             Name of the Event:<br><br>  
             <input style="margin-bottom:15px" type="text" name="event-name"><br>
             <hr>
             Date of the Event:<br><br>
-            <input style="margin-bottom:15px" type="date" id="start" name="event-date" min="2018-01-01" max="2018-12-31"><br>
+            <input style="margin-bottom:15px" type="date" id="start" name="event-date"><br>
             <hr><input type="file" name="images" multiple><br><br>
             <input value="Upload" class="btn btn-primary" style="border-radius:10px" type="submit">
         </form>
     </div>
-{% include './includes/footer.html' %}
+    <script src="{{url_for('static',filename='js/vendors/pace.js')}}"></script>
+    <script src="{{url_for('static',filename='js/vendors/jquery.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/vendors/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/vendors/jquery.magnific-popup.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/vendors/jquery.easing.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/vendors/swiper.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/vendors/owl.carousel.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/custom.js')}}"></script>
+    <script src="{{url_for('static',filename='js/custom.js')}}"></script>
 </body>
 </html>
