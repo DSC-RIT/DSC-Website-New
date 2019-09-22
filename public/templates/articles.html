@@ -1,0 +1,130 @@
+
+{% include './includes/_navbar.html' %}
+{% block body %}
+    <div class = "events container">
+      <section id="workshops" class="section-spacer workshops-section">
+  <div class="container">
+      <header class="section-header text-center">
+          <h2 class="section-title wow fadeInUp">Events & Workshops</h2>
+          <p class="section-subtitle wow fadeInUp">Come learn, share and connect with us in person.</p>
+      </header>
+    <ul class="list-group list-group-flush">
+      
+    {% for event in events  %}
+    {% if loop.index0 % 3 == 0 %}
+    <div class="row">
+    {% endif %}
+
+
+    <div class="col-md-4 col-12">
+        <div class="card event-card wow fadeInUp">
+            <img alt="Event two poster" class="card-img-top" src="{{event.image_url}}" width="140" height="300">
+            <div class="card-body">
+                <h5 class="card-title">{{event.title}}</h5>
+
+                <table>
+                    <tr>
+                        <td width="15%" class="text-blue"><i class="far fa-calendar-alt"></i></td>
+                        <td>{{event.date}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-red"><i class="fas fa-map-marker-alt"></i></td>
+                        <td>{{event.venue}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-green"><i class="far fa-clock"></i></td>
+                        <td>{{event.time}}</td>
+                    </tr>
+                </table>
+          <a class="button float-right" href="/article/{{year}}/{{event.id}}">View more</a>
+            </div>
+        </div>
+    </div>
+    {% if loop.index0 % 3 == 2 or loop.last %}
+    </div>
+    {% endif %}
+  {% endfor %}
+    
+  </ul>  
+<!-- 
+                    <div class="row">
+
+
+                        <div class="col-md-4 col-12">
+                            <div class="card event-card wow fadeInUp">
+                                <img alt="Event two poster" class="card-img-top" data-src="{{url_for('static',filename='images/assets/events/android.png')}}">
+                                <div class="card-body">
+                                    <p class="tagging beginner float-right">Beginner</p>
+                                    <h5 class="card-title">Applied CS</h5>
+
+                                    <table>
+                                        <tr>
+                                            <td width="15%" class="text-blue"><i class="far fa-calendar-alt"></i></td>
+                                            <td>6<sup>th</sup> May 2019</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-red"><i class="fas fa-map-marker-alt"></i></td>
+                                            <td>LH 20, Main Campus</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-green"><i class="far fa-clock"></i></td>
+                                            <td>0900hrs - 1400hrs</td>
+                                        </tr>
+                                    </table>
+
+                                    <a href="https://www.meetup.com/GDG-Kisii/events/258288819/" class="button float-right">View</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-12">
+                            <div class="card event-card wow fadeInUp">
+                                <img alt="Event three poster" class="card-img-top" data-src="{{url_for('static',filename='images/assets/events/flutter.png')}}">
+                                <div class="card-body">
+                                    <p class="tagging expert float-right">Expert</p>
+                                    <h5 class="card-title">Explore ML</h5>
+
+                                    <table>
+                                        <tr>
+                                            <td width="15%" class="text-blue"><i class="far fa-calendar-alt"></i></td>
+                                            <td>22<sup>nd</sup> May 2019</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-red"><i class="fas fa-map-marker-alt"></i></td>
+                                            <td>LH 20, Main Campus</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td class="text-green"><i class="far fa-clock"></i></td>
+                                            <td>1800hrs - 1930hrs</td>
+                                        </tr>
+                                    </table>
+
+                                    <a href="https://www.meetup.com/GDG-Kisii/events/258212444/" class="button float-right">View</a>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="tab-pane" id="past" role="tabpanel" aria-labelledby="past">
+
+
+
+
+                </div>
+            </div>
+        </div>
+        </section>
+    <section class="section-spacer african2 vanish">
+        <div class="container">
+
+
+	</div>
+
+</body>
+</html> -->
+
+{% include './includes/footer.html' %}
+{% endblock %}

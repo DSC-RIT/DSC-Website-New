@@ -1,0 +1,25 @@
+{%  extends 'layout.html' %}
+{% block body %}
+      <div class = "event container">
+          <h1>{{event.title}}</h1><hr>
+          <h4>Venue: {{event.venue}}</h4>
+          <h4>Timings: {{event.time}} </h4>
+          <h4>Date: {{event.date}} </h4>
+          <hr>
+          <h3>About</h4>
+            <p>
+            {{event.body | safe}}
+        </p>
+        <hr>
+        <a type="button" class="btn btn-success" href="{{event.pdf_url}}">Download pdf-report</a>
+        <hr>    
+          <h4>Photos of the Event:</h4>
+        
+      
+        </div>
+{% include './includes/footer.html' %}
+<hr>
+
+{% endblock %}
+
+

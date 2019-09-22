@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DSC - RIT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="DSC RIT" />
+    <meta name="description" content="Developer Student Clubs (DSC) is a Google Developers program for university students to learn mobile and web development skills.">
+    <meta name="keywords" content="dsc, Ramaiah Institute of Technology,google developers, DSC Ramaiah, Bengaluru, ISE" />
+    <meta name="theme-color" content="#0A192F" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="{{url_for('static',filename='images/favicon.png')}}" type="image/png" />
+    <link rel="stylesheet" href="{{url_for('static',filename='css/responsive.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/owl.carousel.min.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css')}}">
+    <link href='https://fonts.googleapis.com/css?family=Google+Sans:400,500,700|Material+Icons' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/styles.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/responsive.css')}}">
+    <link  rel="stylesheet"href="{{url_for('static',filename='css/animate.css')}}"> 
+
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/pace-theme.css')}}">
+    <script src="{{url_for('static',filename='js/wow.min.js')}}"></script>
+    <script>
+        new WOW().init();
+    </script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-144538640-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-144538640-2');
+</script>
+<style>
+a.dropdown-item{
+    color:white;
+    margin-top:5px;
+    font-weight:bold;
+}
+.dropdown:hover{
+    cursor: pointer;
+}
+</style>
+
+</head>
+
+<body class="x-hidden has-sticky-header">
+    <nav class="navbar navbar-expand-lg fixed-top custom-menu custom-menu__light">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="{{url_for('static',filename='images/icon.png')}}" height="35" alt="DSC icon">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="menu-icon__circle">
+                </span>
+                <span class="menu-icon">
+                    <span class="menu-icon__bar"></span>
+                    <span class="menu-icon__bar"></span>
+                    <span class="menu-icon__bar"></span>
+                </span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-lg-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/#overview">Overview
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item"><a href="/#technologies" class="nav-link">Technologies</a></li>
+                    <li class="nav-item"><a href="/#workshops" class="nav-link">Workshops</a></li>
+                    <li class="nav-item"><a href="/team" class="nav-link">Team</a></li>
+                    <li class="nav-item dropdown">
+                                    <a class=" dropdown-toggle nav-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      Events
+                                    </a>
+                                    <div class="dropdown-menu" style="background:black" aria-labelledby="dropdownMenuButton">
+                                      <a class="dropdown-item" href="/articles_filter/2019">2019</a>
+                                      <a class="dropdown-item" href="/articles_filter/2018">2018</a>
+                                    </div>
+                    </li>
+                </ul>
+                
+            </div>
+        </div>
+    </nav>
+    <hr>
+    <div class="container" style="border:5px solid white;padding:40px;margin-top:50px;">
+        <form action="/" method="post" enctype="multipart/form-data">
+            Name of the Event:<br><br>  
+            <input style="margin-bottom:15px" type="text" name="event-name"><br>
+            <hr>
+            Date of the Event:<br><br>
+            <input style="margin-bottom:15px" type="date" id="start" name="event-date" min="2018-01-01" max="2018-12-31"><br>
+            <hr><input type="file" name="images" multiple><br><br>
+            <input value="Upload" class="btn btn-primary" style="border-radius:10px" type="submit">
+        </form>
+    </div>
+    <script src="{{url_for('static',filename='js/vendors/pace.js')}}"></script>
+    <script src="{{url_for('static',filename='js/vendors/jquery.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/vendors/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/vendors/jquery.magnific-popup.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/vendors/jquery.easing.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/vendors/swiper.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/vendors/owl.carousel.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/custom.js')}}"></script>
+    <script src="{{url_for('static',filename='js/custom.js')}}"></script>
+</body>
+</html>

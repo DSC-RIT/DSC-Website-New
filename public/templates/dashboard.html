@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+    <h1>Dasboard <small> Welcome {{session.username}}</small></h1>
+    <a class="btn btn-success" href="/logout">Logout</a>
+    <a class="btn btn-success" href="/add_article">Add article</a><br>
+    <hr>
+    <table class="table table-striped">
+    <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Date</th>
+            <th></th>
+            <th></th>
+     </tr>
+    {% for doc in docs %}
+    <tr>
+            <td>{{doc.id}}</td>
+            <td>{{doc.title}}</td>
+            <td>{{doc.date}}</td>
+            <td><a href="edit_post/{{doc.id}}/{{doc.timestamp}}"  class="btn btn-info pull-right">Edit</a></td>
+            <td>
+                <form action="{{url_for('delete_article',id=doc.timestamp)}}" method="post">
+                    <input type="submit" value="Delete" class="btn btn-danger">
+                </form>
+            </td>
+        </tr>
+        </tr>
+
+    {% endfor %}
+</table>
+    {% endblock %}
