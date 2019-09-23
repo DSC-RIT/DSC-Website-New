@@ -485,8 +485,34 @@ def showImages():
         print(urls)
     return render_template('gallery.html',eventDate=eventDate,eventName=eventName,eventUrls=eventUrls)
 
+@app.route('/search',methods=['GET','POST'])
+def search():
+    if request.method == 'GET':
+        return render_template('search.html')
+    else:
+        name = request.form['search']
+        name = name.replace(" ","")
+        name = name.lower()
+        eventsData1 = db.collection(u'Events').stream()
+        eventArr = []
+        titleArr = []
+        for event in eventsData1:
+            temp = event.to_dict()
+            eventArr.append(temp)
+            titleArr.append(temp['title'].replace(" ","").lower())
 
+        docValues = []
+        searchValues = []
+        for i in range(0,len(titleArr)):
+            if name in titleArr[i]:
+                docValues.append(i)
+                searchValues.append(eventArr[i])
+        print(searchValues)
+    return render_template('search.html',searchValues=searchValues) 
 
+@app.errorhandler(404)  
+def not_found(e):  
+  return render_template("404.html") 
 
 
 if __name__ == '__main__':

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <form action="" method="POST">
+            <input type="search" name="search">
+            <input value="Upload" class="btn btn-primary" style="border-radius:10px" type="submit">
+    </form>
+
+    <ul class="list-group list-group-flush">
+      
+            {% for event in searchValues  %}
+            {% if loop.index0 % 3 == 0 %}
+            <div class="row">
+            {% endif %}
+        
+        
+            <div class="col-md-4 col-12">
+                <div class="card event-card wow fadeInUp">
+                    <img alt="Event two poster" class="card-img-top" src="{{event.image_url}}" width="140" height="300">
+                    <div class="card-body">
+                        <h5 class="card-title">{{event.title}}</h5>
+        
+                        <table>
+                            <tr>
+                                <td width="15%" class="text-blue"><i class="far fa-calendar-alt"></i></td>
+                                <td>{{event.date}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-red"><i class="fas fa-map-marker-alt"></i></td>
+                                <td>{{event.venue}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-green"><i class="far fa-clock"></i></td>
+                                <td>{{event.time}}</td>
+                            </tr>
+                        </table>
+                  <a class="button float-right" href="/article/{{year}}/{{event.id}}">View more</a>
+                    </div>
+                </div>
+            </div>
+            {% if loop.index0 % 3 == 2 or loop.last %}
+            </div>
+            {% endif %}
+          {% endfor %}
+            
+          </ul>  
+        
+</body>
+</html>
