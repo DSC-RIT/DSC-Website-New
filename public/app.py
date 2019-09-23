@@ -17,7 +17,7 @@ cred = credentials.Certificate('key.json')
 
 
 config = {
-    "apiKey": os.environ.get('API_firebase'),
+    "apiKey": 'AIzaSyCleol3wnsu7Jpe-UM2AX3zhBCP0JAAMm0',
     "authDomain": "dsc-website-debbf.firebaseapp.com",
     "databaseURL": "https://dsc-website-debbf.firebaseio.com",
     "projectId": "dsc-website-debbf",
