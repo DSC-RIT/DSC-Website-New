@@ -49,6 +49,9 @@ node_modules/
 # Optional npm cache directory
 .npm
 
+#Adding key.json
+.key
+
 # Optional eslint cache
 .eslintcache
 
