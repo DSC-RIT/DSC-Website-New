@@ -36,8 +36,8 @@ coverage
 
 # Added key.json
 .key
-key.json()
-/key.json()
+key.json
+/key.json
 
 
 # Bower dependency directory (https://bower.io/)
