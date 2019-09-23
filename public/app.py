@@ -218,13 +218,14 @@ def login():
         password= request.form['password']
         try:
             auth.sign_in_with_email_and_password(username,password)
-            flash('Login Successful','success')
+            flash('Login Successful')
             session['logged_in'] = True
             session['username'] = username
             return redirect('/dashboard')
             
         except:
             flash('Please check your credentials')
+            return redirect('/admin')
     #The below goes if it is a get request.
     return render_template('login.html')
 
@@ -239,15 +240,13 @@ def login():
 @is_logged_in
 def logout():
     session.clear() #We just have to clear the session, this will automatically set it to false.
-    flash('You are now logged out','success')
     return redirect('/admin')
 
 @app.route('/dashboard')
 #Allowed only if logged in.
 @is_logged_in
 def dashboard():
-    docs = db.collection('Events').stream()
-
+    docs = db.collection('Events').order_by(u'date',direction=firestore.Query.DESCENDING).stream()
     #I want to automate event deletion too, but i don;t want to as i am very tired
     upcomingEvents = db.collection('UpcomingEvents').order_by(u'date',direction=firestore.Query.DESCENDING).limit(3).stream()
     docsArr = []
@@ -265,10 +264,9 @@ def dashboard():
 def delete_article(id):
     try:
         db.collection(u'Events').document(id).delete()
-        flash('Post Deleted','success')
         return redirect(url_for('dashboard'))
     except:
-        flash('Some error occured')
+        flash('Some error occured','danger')
 
 
 
@@ -278,7 +276,6 @@ def delete_article(id):
 def delete_upcoming_event(id):
     try:
         db.collection(u'UpcomingEvents').document(id).delete()
-        flash('Post Deleted','success')
         return redirect(url_for('dashboard'))
     except:
         flash('Some error occured')    
@@ -286,7 +283,7 @@ def delete_upcoming_event(id):
 #Now, this route will get the acticles of 2019.
 @app.route('/articles_filter/<string:year>/')
 def articles_year(year):
-    all_posts = [doc.to_dict() for doc in events.stream()]
+    all_posts = [doc.to_dict() for doc in events.order_by(u'date',direction=firestore.Query.DESCENDING).stream()] 
     post_2017 = []
     post_2018 = []
     post_2019 = []
@@ -439,10 +436,7 @@ def edit_article(id,timestamp):
             "message":"event_updated(This will return previous timestamp only",
             "timestamp": timestamp
         }
-        flash('Article Updated','success')
-        return data
-
-        # return redirect(url_for('dashboard'))
+        return redirect(url_for('dashboard'))
 
     return render_template('edit_article.html',form=form)
 

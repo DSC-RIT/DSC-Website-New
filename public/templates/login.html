@@ -2,8 +2,11 @@
 
 {% block body %}
   <h1>Login</h1>
+
   <form action="" method="POST">
     <div class="form-group">
+
+  {% include 'includes/messages.html' %}
       <label>Username</label>
       <input type="text" name="username" class="form-control" value={{request.form.username}}>
     </div>
@@ -13,6 +16,7 @@
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
-{% endblock %}
+
+  {% endblock %}
 
 {% include './includes/footer.html' %}
