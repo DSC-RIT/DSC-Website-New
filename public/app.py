@@ -11,12 +11,13 @@ from functools import wraps
 from wtforms import Form,StringField,TextAreaField,PasswordField,validators,DateField;
 from datetime import datetime
 import pyrebase
+import os
 app = Flask(__name__)
 cred = credentials.Certificate('key.json')
 
 
 config = {
-    "apiKey": "AIzaSyCleol3wnsu7Jpe-UM2AX3zhBCP0JAAMm0",
+    "apiKey": os.environ.get('API_firebase'),
     "authDomain": "dsc-website-debbf.firebaseapp.com",
     "databaseURL": "https://dsc-website-debbf.firebaseio.com",
     "projectId": "dsc-website-debbf",
