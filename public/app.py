@@ -31,6 +31,7 @@ firebase = pyrebase.initialize_app(config)
 db1 = firebase.database()
 storage = firebase.storage()
 events  = db.collection('Events')
+UpcomingEvents = db.collection('UpcomingEvents')
 auth = firebase.auth()
 
 def is_logged_in(f):
@@ -45,9 +46,25 @@ def is_logged_in(f):
     return wrap
 
 
+def is_not_logged_in(f):
+    #Have to figure out what the heck does this wraps do!!
+    @wraps(f)
+    def wrap(*args,**kwargs):
+        if 'logged_in' in session:
+            return redirect('/dashboard')
+        else:
+            return f(*args,**kwargs)
+    return wrap
+
+
 @app.route('/')
 def index():
-    return render_template('index.html')
+    upcomingEvents = db.collection('UpcomingEvents').order_by(u'date',direction=firestore.Query.DESCENDING).limit(3).stream()
+    upcomingArr = []
+    for doc in upcomingEvents:
+        upcomingArr.append(doc.to_dict())
+        print(doc.to_dict())
+    return render_template('index.html',upcomingEvents=upcomingArr)
 
 @app.route('/team')
 def team():
@@ -66,6 +83,16 @@ class ArticleForm(Form):
     venue = StringField('Venue',[validators.length(min=5,max=50)])
     time = StringField('Time',[validators.length(min=2,max=10)])
     date = DateField('Date', format='%Y-%m-%d') 
+
+class UpcomingForm(Form):
+
+    title = StringField('Title',[validators.length(min=1,max=50)])
+    image_url = StringField('ImageUrl',[validators.URL(require_tld=False,message=None)])
+    venue = StringField('Venue',[validators.length(min=5,max=50)])
+    time = StringField('Time',[validators.length(min=2,max=10)])
+    date = DateField('Date', format='%Y-%m-%d') 
+    level = StringField('Level',[validators.length(min=5,max=15)])
+    event_url = StringField('EventUrl',[validators.URL(require_tld=False,message=None)])
 
 
 # This route is regarding the event posting.
@@ -129,23 +156,60 @@ def postEvent():
         }
 
         res = events.document(timestamp).set(eventData)
-
-
-
-
         data = {
             "message":"event_added",
             "timestamp": timestamp
         }
-        return data
+        return redirect('/dashboard')
     elif request.method == 'GET':
         return render_template('add_article.html',form=form)
     else:
         return "Invalid request"
 
-#This route will be regarding user sign in
+@app.route('/add_upcoming_event',methods=['POST','GET'])
+@is_logged_in
+def postUpcomingEvent():
+    form  = UpcomingForm(request.form)
+    if request.method == 'POST':
+        now = datetime.now()
+        timestamp = now.strftime("%d-%m-%Y--%H:%M:%S")
+
+        title = form.title.data
+        image_url = form.image_url.data
+        event_url = form.event_url.data
+        venue = form.venue.data
+        level = form.level.data
+        date = str(form.date.data)
+        time = str(form.time.data)
+        idparam1 = title.replace(" ","")
+        id1 = idparam1+"-"+date
+
+        eventData = {
+            "title":title,
+            "date":date,
+            "id":id1,
+            "timestamp":timestamp,
+            "time":time,
+            "level":level,
+            "image_url":image_url,
+            "venue":venue,
+            "event_url":event_url
+        }
+        res = UpcomingEvents.document(timestamp).set(eventData)
+        data = {
+            "message":"upcoming_event_added",
+            "timestamp": timestamp
+        }
+        return redirect('/dashboard')
+    elif request.method == 'GET':
+        return render_template('add_upcoming_event.html',form=form)
+    else:
+        return "Invalid request"
+
+
 
 @app.route('/admin',methods=['GET','POST'])
+@is_not_logged_in
 def login():
     if request.method == 'POST':
 
@@ -176,17 +240,24 @@ def login():
 def logout():
     session.clear() #We just have to clear the session, this will automatically set it to false.
     flash('You are now logged out','success')
-    return render_template('login.html')
+    return redirect('/admin')
 
 @app.route('/dashboard')
 #Allowed only if logged in.
 @is_logged_in
 def dashboard():
     docs = db.collection('Events').stream()
+
+    #I want to automate event deletion too, but i don;t want to as i am very tired
+    upcomingEvents = db.collection('UpcomingEvents').order_by(u'date',direction=firestore.Query.DESCENDING).limit(3).stream()
     docsArr = []
     for doc in docs:
         docsArr.append(doc.to_dict())
-    return render_template('dashboard.html',docs=docsArr)
+    upcomingArr = []
+    for doc in upcomingEvents:
+        upcomingArr.append(doc.to_dict())
+        print(doc.to_dict())
+    return render_template('dashboard.html',docs=docsArr,upcoming=upcomingArr)
 
 
 @app.route('/delete_article/<string:id>',methods=['POST'])
@@ -197,7 +268,21 @@ def delete_article(id):
         flash('Post Deleted','success')
         return redirect(url_for('dashboard'))
     except:
-        flash('Some error occured')     
+        flash('Some error occured')
+
+
+
+#Upcoming Article deletion done
+@app.route('/delete_upcoming_event/<string:id>',methods=['POST'])
+@is_logged_in
+def delete_upcoming_event(id):
+    try:
+        db.collection(u'UpcomingEvents').document(id).delete()
+        flash('Post Deleted','success')
+        return redirect(url_for('dashboard'))
+    except:
+        flash('Some error occured')    
+
 #Now, this route will get the acticles of 2019.
 @app.route('/articles_filter/<string:year>/')
 def articles_year(year):

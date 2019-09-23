@@ -1,4 +1,9 @@
 {% include './includes/_navbar.html' %}
+<style>
+.a{
+    text-align: center
+}
+</style>
 {% block body %}
 <div class = "container ">
     <div class = "events container">
@@ -9,26 +14,69 @@
                 <p class="section-subtitle wow fadeInUp"></p>
             </header>
 
-            <div class="workshops-type-switch">
-                <ul class="nav nav-pills justify-content-center js-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#upcoming">Past Events</a>
-                    </li>
-                </ul>
-            </div>
+
+
+    <h1>Dashboard</h1>
+    <div style = "position: relative;left: 317px;padding-bottom: 6px;">
+    <a class="btn btn-success" href="/add_article" style="margin-right:9px ">Add article</a>
+    <a class="btn btn-success" href="/upload" style="margin-right:9px">Add Photos</a>
+    <a class="btn btn-success" href="/add_upcoming_event" style="margin-right:9px ">Add Upcoming Events</a>
+    <a class="btn btn-success" href="/logout">Logout</a>
+    </div>
             <div class="tab-content">
                 <div class="tab-pane active" id="upcoming" role="tabpanel" aria-labelledby="upcoming">
                     <div class="row">
 
 
-    <h1>Dasboard</h1>
-    <div style = "position: relative;left: 317px;padding-bottom: 6px;">
-    <a class="btn btn-success" href="/add_article" style="margin-right:9px ">Add article</a>
-    <a class="btn btn-success" href="/upload" style="margin-right:9px">Add Photos</a>
-    <a class="btn btn-success" href="/" style="margin-right:9px ">Add Upcoming Events</a>
-    <a class="btn btn-success" href="/logout">Logout</a>
+    <div class="workshops-type-switch">
+        <ul class="nav nav-pills justify-content-center js-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="#upcoming">Upcoming Events</a><br/>
+            </li>
+        </ul>
     </div>
+    <br>
 
+    <table class="table table-striped">
+        <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Delete</th>
+         </tr>
+         {% if upcoming|length > 0 %}
+        {% for doc in upcoming %}
+        <tr>
+                <td>{{doc.id}}</td>
+                <td>{{doc.title}}</td>
+                <td>{{doc.date}}</td>
+                <td>
+                    
+                <form action="{{url_for('delete_upcoming_event',id=doc.timestamp)}}" method="post">
+                    <input type="submit" value="Delete" class="btn btn-danger">
+                </form>
+                </td>
+            </tr>
+            
+    
+        {% endfor %}
+        {% else %}
+        <td></td>
+        <td></td>
+        <td><h1 class="a">No upcoming Events Added</h1></td>
+        <td></td>
+        {% endif %}
+    </tr>
+        </table>
+
+    <div class="workshops-type-switch">
+        <ul class="nav nav-pills justify-content-center js-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="#upcoming">Past Events Doc</a><br/>
+            </li>
+            <br/>
+        </ul>
+    </div>
     <table class="table table-striped">
     <tr>
             <th>ID</th>
@@ -37,6 +85,7 @@
             <th>Edit</th>
             <th>Delete</th>
      </tr>
+     {% if docs|length > 0 %}
     {% for doc in docs %}
     <tr>
             <td>{{doc.id}}</td>
@@ -52,6 +101,13 @@
         </tr>
 
     {% endfor %}
+    {% else %}
+        <td></td>
+        <td></td>
+        <td><h1 class="a">No Reports added</h1></td>
+        <td></td>
+        <td></td>
+        {% endif %}
     </table>
 {% endblock %}
 {% include './includes/footer.html' %}
