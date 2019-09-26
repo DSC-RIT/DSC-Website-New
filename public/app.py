@@ -498,18 +498,21 @@ def search():
 
         docValues = []
         searchValues = []
+        yearValues = []
         for i in range(0,len(titleArr)):
             if name in titleArr[i]:
                 docValues.append(i)
                 searchValues.append(eventArr[i])
-        print(searchValues)
-    return render_template('search.html',searchValues=searchValues) 
+                yearValues.append(eventArr[i]['date'][0:4])
+        print(yearValues)
+        values = zip(searchValues,yearValues)
+    return render_template('search.html',searchValues=searchValues,eventValues=values) 
 
 @app.errorhandler(404)  
 def not_found(e):  
   return render_template("404.html") 
 
+app.config['SECRET_KEY'] = 'dscrit'
 
 if __name__ == '__main__':
-    app.secret_key = 'secret_123'
-    app.run(debug=True)
+    app.run()
