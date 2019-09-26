@@ -34,10 +34,6 @@ coverage
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
 
-# Added key.json
-.key
-key.json
-/key.json
 
 
 # Bower dependency directory (https://bower.io/)
