@@ -6,6 +6,7 @@ import re
 from requests import Response
 import pdfkit
 import uuid
+from configFile import *
 import datetime
 from functools import wraps
 from wtforms import Form,StringField,TextAreaField,PasswordField,validators,DateField;
@@ -16,15 +17,7 @@ app = Flask(__name__)
 cred = credentials.Certificate('key.json')
 
 
-config = {
-    "apiKey": 'AIzaSyCleol3wnsu7Jpe-UM2AX3zhBCP0JAAMm0',
-    "authDomain": "dsc-website-debbf.firebaseapp.com",
-    "databaseURL": "https://dsc-website-debbf.firebaseio.com",
-    "projectId": "dsc-website-debbf",
-    "storageBucket": "dsc-website-debbf.appspot.com",
-    "messagingSenderId": "161083743915",
-    "appId": "1:161083743915:web:4e0e83c8b48638248261ee"
-}
+
 
 default_app = initialize_app(cred)
 db = firestore.client()
