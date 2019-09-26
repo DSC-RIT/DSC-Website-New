@@ -1,0 +1,9 @@
+flask
+firebase_admin
+flask_wtf
+requests
+pdfkit
+uuid
+wtform
+pyrebase
+gunicorn
