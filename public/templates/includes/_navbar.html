@@ -5,13 +5,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>DSC - RIT</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="DSC RIT" />
     <meta name="description" content="Developer Student Clubs (DSC) is a Google Developers program for university students to learn mobile and web development skills.">
     <meta name="keywords" content="dsc, Ramaiah Institute of Technology,google developers, DSC Ramaiah, Bengaluru, ISE" />
     <meta name="theme-color" content="#0A192F" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="manifest" href="manifest.json" />
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <link rel="manifest" href="{{url_for('static',filename='manifest/manifest.json')}}" />
+    
+
     <link rel="icon" href="{{url_for('static',filename='images/favicon.png')}}" type="image/png" />
     <link rel="stylesheet" href="{{url_for('static',filename='css/responsive.css')}}">
     <link rel="stylesheet" href="{{url_for('static',filename='css/owl.carousel.min.css')}}">
@@ -89,9 +92,7 @@ html {
                                       Events
                                     </a>
                                     <div class="dropdown-menu" style="background:black" aria-labelledby="dropdownMenuButton">
-                                        {% if d1 == '2019' %}
                                       <a class="dropdown-item" href="/articles_filter/2019">2019</a>
-                                      {% endif %}
                                       <a class="dropdown-item" href="/articles_filter/2018">2018</a>
                                       {% if d1 == '2020' %}
                                       <a class="dropdown-item" href="/articles_filter/2020">2020</a>

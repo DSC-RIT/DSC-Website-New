@@ -480,8 +480,14 @@ def showImages():
 @app.route('/search',methods=['GET','POST'])
 def search():
     if request.method == 'GET':
+        today = date.today()
+        d1 = today.strftime("%d/%m/%Y")
+        d1 = d1[6:10]
         return render_template('search.html')
     else:
+        today = date.today()
+        d1 = today.strftime("%d/%m/%Y")
+        d1 = d1[6:10]
         name = request.form['search']
         name = name.replace(" ","")
         name = name.lower()
@@ -503,7 +509,7 @@ def search():
                 yearValues.append(eventArr[i]['date'][0:4])
         print(yearValues)
         values = zip(searchValues,yearValues)
-    return render_template('search.html',searchValues=searchValues,eventValues=values) 
+    return render_template('search.html',searchValues=searchValues,eventValues=values,d1=d1) 
 
 @app.errorhandler(404)  
 def not_found(e):  
