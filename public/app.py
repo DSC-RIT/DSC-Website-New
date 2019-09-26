@@ -515,4 +515,4 @@ def not_found(e):
 app.config['SECRET_KEY'] = 'dscrit'
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run()
