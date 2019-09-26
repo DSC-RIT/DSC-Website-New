@@ -52,7 +52,10 @@ node_modules/
 .npm
 
 #Adding key.json
-.key
+key.json
+
+#Adding config
+configFile.py
 
 # Optional eslint cache
 .eslintcache

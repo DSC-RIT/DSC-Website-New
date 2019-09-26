@@ -89,8 +89,13 @@ html {
                                       Events
                                     </a>
                                     <div class="dropdown-menu" style="background:black" aria-labelledby="dropdownMenuButton">
+                                        {% if d1 == '2019' %}
                                       <a class="dropdown-item" href="/articles_filter/2019">2019</a>
+                                      {% endif %}
                                       <a class="dropdown-item" href="/articles_filter/2018">2018</a>
+                                      {% if d1 == '2020' %}
+                                      <a class="dropdown-item" href="/articles_filter/2020">2020</a>
+                                      {% endif %}
                                     </div>
                                   <!-- </div>  -->
                     </li>
