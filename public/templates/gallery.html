@@ -2,7 +2,6 @@
 {% block body %}
 <div class = "container">
 <h1>Event Gallery</h1><br><br>
-<h4>Photos of the Event:</h4><br>
     {% for i in range(eventDate|length)%}
     <h3>{{eventName[i]}}{{eventDate[i]}}</h3> <hr>   
 {% for url in eventUrls[i]  %}

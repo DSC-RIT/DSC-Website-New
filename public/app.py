@@ -9,7 +9,7 @@ import uuid
 import datetime
 from functools import wraps
 from wtforms import Form,StringField,TextAreaField,PasswordField,validators,DateField;
-from datetime import datetime
+from datetime import datetime,date
 import pyrebase
 import os
 app = Flask(__name__)
@@ -63,9 +63,13 @@ def index():
     upcomingEvents = db.collection('UpcomingEvents').order_by(u'date',direction=firestore.Query.DESCENDING).limit(3).stream()
     upcomingArr = []
     for doc in upcomingEvents:
+        today = date.today()
+        d1 = today.strftime("%d/%m/%Y")
+        d1 = d1[6:10]
+        print(d1)
         upcomingArr.append(doc.to_dict())
         print(doc.to_dict())
-    return render_template('index.html',upcomingEvents=upcomingArr)
+    return render_template('index.html',upcomingEvents=upcomingArr,d1=d1)
 
 @app.route('/team')
 def team():
@@ -515,4 +519,4 @@ def not_found(e):
 app.config['SECRET_KEY'] = 'dscrit'
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
