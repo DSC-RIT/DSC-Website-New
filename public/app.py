@@ -72,8 +72,8 @@ def team():
 def blogs():
     return render_template('blogs.html')
 
-@app.route('/events2019')
-def events2019():
+# @app.route('/events2019')
+# def events2019():
 
 
 
