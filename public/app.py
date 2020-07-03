@@ -68,6 +68,10 @@ def index():
 def team():
     return render_template('team.html')
 
+@app.route('/blogs')
+def blogs():
+    return render_template('blogs.html')
+
 # @app.route('/events2019')
 # def events2019():
 
