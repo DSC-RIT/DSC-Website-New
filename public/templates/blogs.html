@@ -37,13 +37,13 @@
             <div class="carousel-item {% if loop.index == 1 %} active {% endif %}" id="slide{{ loop.index }}"
                 style="background-image: url({{post.image}})">
 
-                <div class="containers">
+                <div  class="containers">
 
                     <div class="containers">
 
                         <h1>{{post.title}}</h1>
                         <p>{{post.subtitle}}</p>
-                        <a href="{{url_for('post',post_id=post.id)}}""  class=" btn btn-lg btn-primary">Read more</a>
+                        <a  href="{{url_for('post',post_id=post.id)}}"  class=" btn btn-primary">Read more</a>
 
                     </div>
 
@@ -84,7 +84,7 @@
                 <p class="post-meta">
                     Posted by
                     <a href="#!">{{blog.author}}</a>
-                    on {{blog.date}}
+                   
 
                 </p>
             </div>

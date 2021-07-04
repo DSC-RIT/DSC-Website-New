@@ -192,6 +192,19 @@ def editPost(post_id):
         db.collection('blogs').document(post_id).update(data)
         return redirect('/')
 
+
+# Delete blog Post
+
+@app.route('/delete_blog/<string:id>', methods=['POST'])
+@is_logged_in
+def delete_blog(id):
+    try:
+        db.collection(u'blogs').document(id).delete()
+        return redirect(url_for('dashboard'))
+    except:
+        flash('Some error occured', 'danger')
+
+
 # This route is regarding the event posting.
 
 
@@ -346,6 +359,11 @@ def logout():
 # Allowed only if logged in.
 @is_logged_in
 def dashboard():
+    blogs = db.collection('blogs').order_by(
+        u'timestamp', direction=firestore.Query.DESCENDING).get()
+    blogsArr = []
+    for blog in blogs:
+        blogsArr.append(blog.to_dict())
     docs = db.collection('Events').order_by(
         u'date', direction=firestore.Query.DESCENDING).stream()
     # I want to automate event deletion too, but i don;t want to as i am very tired
@@ -358,7 +376,7 @@ def dashboard():
     for doc in upcomingEvents:
         upcomingArr.append(doc.to_dict())
         print(doc.to_dict())
-    return render_template('dashboard.html', docs=docsArr, upcoming=upcomingArr)
+    return render_template('dashboard.html', docs=docsArr, upcoming=upcomingArr, blogs=blogsArr)
 
 
 @app.route('/delete_article/<string:id>', methods=['POST'])
