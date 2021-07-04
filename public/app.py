@@ -1,22 +1,29 @@
 
-from flask import Flask, redirect, url_for,request,jsonify,render_template,flash,session;
-from firebase_admin import credentials, firestore, initialize_app;
+from flask import Flask, redirect, url_for, request, jsonify, render_template, flash, session
+from firebase_admin import credentials, firestore, initialize_app
 from flask_wtf import Form
 import re
 from requests import Response
 import pdfkit
 import uuid
-from configFile import *
 import datetime
 from functools import wraps
-from wtforms import Form,StringField,TextAreaField,PasswordField,validators,DateField;
-from datetime import datetime,date
+from wtforms import Form, StringField, TextAreaField, PasswordField, validators, DateField
+from datetime import datetime, date
 import pyrebase
 import os
 app = Flask(__name__)
 cred = credentials.Certificate('key.json')
 
-
+config = {
+    "apiKey": "AIzaSyAng2bGV9NbgpfizH_2dak0bYgF54YB7jE",
+    "authDomain": "celestial-math-256613.firebaseapp.com",
+    "databaseURL": "https://celestial-math-256613.firebaseio.com",
+    "projectId": "celestial-math-256613",
+    "storageBucket": "celestial-math-256613.appspot.com",
+    "messagingSenderId": "520023954006",
+    "appId": "1:520023954006:web:944be6f107f3432404a1f7"
+}
 
 
 default_app = initialize_app(cred)
@@ -24,36 +31,38 @@ db = firestore.client()
 firebase = pyrebase.initialize_app(config)
 db1 = firebase.database()
 storage = firebase.storage()
-events  = db.collection('Events')
+events = db.collection('Events')
 UpcomingEvents = db.collection('UpcomingEvents')
 auth = firebase.auth()
 
+
 def is_logged_in(f):
-    #Have to figure out what the heck does this wraps do!!
+    # Have to figure out what the heck does this wraps do!!
     @wraps(f)
-    def wrap(*args,**kwargs):
+    def wrap(*args, **kwargs):
         if 'logged_in' in session:
-            return f(*args,**kwargs)
+            return f(*args, **kwargs)
         else:
-            flash('Unauthorized, Please login','danger')
+            flash('Unauthorized, Please login', 'danger')
             return redirect('/admin')
     return wrap
 
 
 def is_not_logged_in(f):
-    #Have to figure out what the heck does this wraps do!!
+    # Have to figure out what the heck does this wraps do!!
     @wraps(f)
-    def wrap(*args,**kwargs):
+    def wrap(*args, **kwargs):
         if 'logged_in' in session:
             return redirect('/dashboard')
         else:
-            return f(*args,**kwargs)
+            return f(*args, **kwargs)
     return wrap
 
 
 @app.route('/')
 def index():
-    upcomingEvents = db.collection('UpcomingEvents').order_by(u'date',direction=firestore.Query.DESCENDING).limit(3).stream()
+    upcomingEvents = db.collection('UpcomingEvents').order_by(
+        u'date', direction=firestore.Query.DESCENDING).limit(3).stream()
     upcomingArr = []
     for doc in upcomingEvents:
         today = date.today()
@@ -62,46 +71,72 @@ def index():
         print(d1)
         upcomingArr.append(doc.to_dict())
         print(doc.to_dict())
-    return render_template('index.html',upcomingEvents=upcomingArr,d1=d1)
+    return render_template('index.html', upcomingEvents=upcomingArr)
+
 
 @app.route('/team')
 def team():
     return render_template('team.html')
 
-@app.route('/blogs')
-def blogs():
-    return render_template('blogs.html')
 
 # @app.route('/events2019')
 # def events2019():
 
 
-
 class ArticleForm(Form):
 
-    title = StringField('Title',[validators.length(min=1,max=50)])
-    body = TextAreaField('Body',[validators.length(min=30)])
-    image_url = StringField('ImageUrl',[validators.URL(require_tld=False,message=None)])
-    venue = StringField('Venue',[validators.length(min=5,max=50)])
-    time = StringField('Time',[validators.length(min=2,max=10)])
-    date = DateField('Date', format='%Y-%m-%d') 
+    title = StringField('Title', [validators.length(min=1, max=50)])
+    body = TextAreaField('Body', [validators.length(min=30)])
+    image_url = StringField(
+        'ImageUrl', [validators.URL(require_tld=False, message=None)])
+    venue = StringField('Venue', [validators.length(min=5, max=50)])
+    time = StringField('Time', [validators.length(min=2, max=10)])
+    date = DateField('Date', format='%Y-%m-%d')
+
 
 class UpcomingForm(Form):
 
-    title = StringField('Title',[validators.length(min=1,max=50)])
-    image_url = StringField('ImageUrl',[validators.URL(require_tld=False,message=None)])
-    venue = StringField('Venue',[validators.length(min=5,max=50)])
-    time = StringField('Time',[validators.length(min=2,max=10)])
-    date = DateField('Date', format='%Y-%m-%d') 
-    level = StringField('Level',[validators.length(min=5,max=15)])
-    event_url = StringField('EventUrl',[validators.URL(require_tld=False,message=None)])
+    title = StringField('Title', [validators.length(min=1, max=50)])
+    image_url = StringField(
+        'ImageUrl', [validators.URL(require_tld=False, message=None)])
+    venue = StringField('Venue', [validators.length(min=5, max=50)])
+    time = StringField('Time', [validators.length(min=2, max=10)])
+    date = DateField('Date', format='%Y-%m-%d')
+    level = StringField('Level', [validators.length(min=5, max=15)])
+    event_url = StringField(
+        'EventUrl', [validators.URL(require_tld=False, message=None)])
 
+
+# Blog Page
+@app.route('/blogs')
+def blogs():
+    blogs = db.collection('blogs').order_by(
+        u'timestamp', direction=firestore.Query.DESCENDING).get()
+    blogsArr = []
+    for blog in blogs:
+        blogsArr.append(blog.to_dict())
+    headArr = blogsArr
+    headArr = headArr[:3]
+    return render_template('blogs.html', blogs=blogsArr, headArr=headArr)
+
+
+# Blog Post
+@app.route('/blog_post/<string:post_id>', methods=['GET'])
+def post(post_id):
+    posts = db.collection('blogs').where("id", "==", post_id).get()
+    postArr = []
+    for post in posts:
+        postArr.append(post.to_dict())
+
+    return render_template('blog_post.html', post=postArr)
 
 # This route is regarding the event posting.
-@app.route('/add_article',methods=['POST','GET'])
+
+
+@app.route('/add_article', methods=['POST', 'GET'])
 @is_logged_in
 def postEvent():
-    form  = ArticleForm(request.form)
+    form = ArticleForm(request.form)
     if request.method == 'POST':
         now = datetime.now()
         timestamp = now.strftime("%d-%m-%Y--%H:%M:%S")
@@ -112,7 +147,7 @@ def postEvent():
         venue = form.venue.data
         date = str(form.date.data)
         time = str(form.time.data)
-        idparam1 = title.replace(" ","")
+        idparam1 = title.replace(" ", "")
         id1 = idparam1+"-"+date
         options = {
             'page-size': 'Letter',
@@ -121,7 +156,7 @@ def postEvent():
             'margin-bottom': '0.75in',
             'margin-left': '0.75in',
             'encoding': "UTF-8",
-            'custom-header' : [
+            'custom-header': [
                 ('Accept-Encoding', 'gzip')
             ],
             'cookie': [
@@ -130,48 +165,51 @@ def postEvent():
             ],
             'no-outline': None
         }
-        
 
-        try: 
-            pdfkit.from_string(body,'genReport.pdf')
-            pdfkit.from_string(body,'genReport.docx')
-            report =  str(title)+"-"+str(date)
+        try:
+            pdfkit.from_string(body, 'genReport.pdf')
+            pdfkit.from_string(body, 'genReport.docx')
+            report = str(title)+"-"+str(date)
             storage.child('reportsPdf/{}'.format(report)).put('genReport.pdf')
-            storage.child('reportsDocx/{}'.format(report)).put('genReport.docx')
-            pdf_url = storage.child('reportsPdf/{}'.format(report)).get_url(None)
-            docx_url = storage.child('reportsDocx/{}'.format(report)).get_url(None)
+            storage.child('reportsDocx/{}'.format(report)
+                          ).put('genReport.docx')
+            pdf_url = storage.child(
+                'reportsPdf/{}'.format(report)).get_url(None)
+            docx_url = storage.child(
+                'reportsDocx/{}'.format(report)).get_url(None)
         except:
             pdf_url = ""
             docx_url = ""
         print(pdf_url)
         eventData = {
-            "title":title,
-            "date":date,
-            "id":id1,
-            "timestamp":timestamp,
-            "time":time,
-            "image_url":image_url,
-            "venue":venue,
-            "body":body,
-            "pdf_url":pdf_url,
-            "docx_url":docx_url
+            "title": title,
+            "date": date,
+            "id": id1,
+            "timestamp": timestamp,
+            "time": time,
+            "image_url": image_url,
+            "venue": venue,
+            "body": body,
+            "pdf_url": pdf_url,
+            "docx_url": docx_url
         }
 
         res = events.document(timestamp).set(eventData)
         data = {
-            "message":"event_added",
+            "message": "event_added",
             "timestamp": timestamp
         }
         return redirect('/dashboard')
     elif request.method == 'GET':
-        return render_template('add_article.html',form=form)
+        return render_template('add_article.html', form=form)
     else:
         return "Invalid request"
 
-@app.route('/add_upcoming_event',methods=['POST','GET'])
+
+@app.route('/add_upcoming_event', methods=['POST', 'GET'])
 @is_logged_in
 def postUpcomingEvent():
-    form  = UpcomingForm(request.form)
+    form = UpcomingForm(request.form)
     if request.method == 'POST':
         now = datetime.now()
         timestamp = now.strftime("%d-%m-%Y--%H:%M:%S")
@@ -183,74 +221,74 @@ def postUpcomingEvent():
         level = form.level.data
         date = str(form.date.data)
         time = str(form.time.data)
-        idparam1 = title.replace(" ","")
+        idparam1 = title.replace(" ", "")
         id1 = idparam1+"-"+date
 
         eventData = {
-            "title":title,
-            "date":date,
-            "id":id1,
-            "timestamp":timestamp,
-            "time":time,
-            "level":level,
-            "image_url":image_url,
-            "venue":venue,
-            "event_url":event_url
+            "title": title,
+            "date": date,
+            "id": id1,
+            "timestamp": timestamp,
+            "time": time,
+            "level": level,
+            "image_url": image_url,
+            "venue": venue,
+            "event_url": event_url
         }
         res = UpcomingEvents.document(timestamp).set(eventData)
         data = {
-            "message":"upcoming_event_added",
+            "message": "upcoming_event_added",
             "timestamp": timestamp
         }
         return redirect('/dashboard')
     elif request.method == 'GET':
-        return render_template('add_upcoming_event.html',form=form)
+        return render_template('add_upcoming_event.html', form=form)
     else:
         return "Invalid request"
 
 
-
-@app.route('/admin',methods=['GET','POST'])
+@app.route('/admin', methods=['GET', 'POST'])
 @is_not_logged_in
 def login():
     if request.method == 'POST':
 
-        #Get for fields.
+        # Get for fields.
         username = request.form['username']
-        password= request.form['password']
+        password = request.form['password']
         try:
-            auth.sign_in_with_email_and_password(username,password)
+            auth.sign_in_with_email_and_password(username, password)
             flash('Login Successful')
             session['logged_in'] = True
             session['username'] = username
             return redirect('/dashboard')
-            
+
         except:
             flash('Please check your credentials')
             return redirect('/admin')
-    #The below goes if it is a get request.
+    # The below goes if it is a get request.
     return render_template('login.html')
 
 
-
-
-
-#The below route will check if logged in
+# The below route will check if logged in
 
 
 @app.route('/logout')
 @is_logged_in
 def logout():
-    session.clear() #We just have to clear the session, this will automatically set it to false.
+    # We just have to clear the session, this will automatically set it to false.
+    session.clear()
     return redirect('/admin')
 
+
 @app.route('/dashboard')
-#Allowed only if logged in.
+# Allowed only if logged in.
 @is_logged_in
 def dashboard():
-    docs = db.collection('Events').order_by(u'date',direction=firestore.Query.DESCENDING).stream()
-    #I want to automate event deletion too, but i don;t want to as i am very tired
-    upcomingEvents = db.collection('UpcomingEvents').order_by(u'date',direction=firestore.Query.DESCENDING).limit(3).stream()
+    docs = db.collection('Events').order_by(
+        u'date', direction=firestore.Query.DESCENDING).stream()
+    # I want to automate event deletion too, but i don;t want to as i am very tired
+    upcomingEvents = db.collection('UpcomingEvents').order_by(
+        u'date', direction=firestore.Query.DESCENDING).limit(3).stream()
     docsArr = []
     for doc in docs:
         docsArr.append(doc.to_dict())
@@ -258,34 +296,36 @@ def dashboard():
     for doc in upcomingEvents:
         upcomingArr.append(doc.to_dict())
         print(doc.to_dict())
-    return render_template('dashboard.html',docs=docsArr,upcoming=upcomingArr)
+    return render_template('dashboard.html', docs=docsArr, upcoming=upcomingArr)
 
 
-@app.route('/delete_article/<string:id>',methods=['POST'])
+@app.route('/delete_article/<string:id>', methods=['POST'])
 @is_logged_in
 def delete_article(id):
     try:
         db.collection(u'Events').document(id).delete()
         return redirect(url_for('dashboard'))
     except:
-        flash('Some error occured','danger')
+        flash('Some error occured', 'danger')
 
 
-
-#Upcoming Article deletion done
-@app.route('/delete_upcoming_event/<string:id>',methods=['POST'])
+# Upcoming Article deletion done
+@app.route('/delete_upcoming_event/<string:id>', methods=['POST'])
 @is_logged_in
 def delete_upcoming_event(id):
     try:
         db.collection(u'UpcomingEvents').document(id).delete()
         return redirect(url_for('dashboard'))
     except:
-        flash('Some error occured')    
+        flash('Some error occured')
 
-#Now, this route will get the acticles of 2019.
+# Now, this route will get the acticles of 2019.
+
+
 @app.route('/articles_filter/<string:year>/')
 def articles_year(year):
-    all_posts = [doc.to_dict() for doc in events.order_by(u'date',direction=firestore.Query.DESCENDING).stream()] 
+    all_posts = [doc.to_dict() for doc in events.order_by(
+        u'date', direction=firestore.Query.DESCENDING).stream()]
     post_2017 = []
     post_2018 = []
     post_2019 = []
@@ -307,30 +347,30 @@ def articles_year(year):
         elif("2022" in post['date']):
             post_2022.append(post)
         else:
-            #This should be handled, when the website will be again up for maintenance.
+            # This should be handled, when the website will be again up for maintenance.
             print("Maintenance required")
     if(year == "2017"):
-        eventsData =  post_2017
+        eventsData = post_2017
     elif(year == "2018"):
-        eventsData =  post_2018
+        eventsData = post_2018
     elif(year == "2019"):
-        eventsData =  post_2019
+        eventsData = post_2019
     elif(year == "2020"):
-        eventsData =  post_2020
+        eventsData = post_2020
     elif(year == "2021"):
-        eventsData =  post_2021
+        eventsData = post_2021
     elif(year == "2022"):
-        eventsData =  post_2022   
+        eventsData = post_2022
     else:
-        print("Maintenance required")     
+        print("Maintenance required")
         eventsData = jsonify([{}])
 
-    return render_template('articles.html',events=eventsData,year=year)
-        
+    return render_template('articles.html', events=eventsData, year=year)
 
-#This is for opening up a specific artcile.
+
+# This is for opening up a specific artcile.
 @app.route('/article/<string:year>/<string:id1>')
-def article1(year,id1):
+def article1(year, id1):
     all_posts = [doc.to_dict() for doc in events.stream()]
     post_2017 = []
     post_2018 = []
@@ -353,22 +393,22 @@ def article1(year,id1):
         elif("2022" in post['date']):
             post_2022.append(post)
         else:
-            #This should be handled, when the website will be again up for maintenance.
+            # This should be handled, when the website will be again up for maintenance.
             print("Maintenance required")
     if(year == "2017"):
-        eventsData =  post_2017
+        eventsData = post_2017
     elif(year == "2018"):
-        eventsData =  post_2018
+        eventsData = post_2018
     elif(year == "2019"):
-        eventsData =  post_2019
+        eventsData = post_2019
     elif(year == "2020"):
-        eventsData =  post_2020
+        eventsData = post_2020
     elif(year == "2021"):
-        eventsData =  post_2021
+        eventsData = post_2021
     elif(year == "2022"):
-        eventsData =  post_2022   
+        eventsData = post_2022
     else:
-        print("Maintenance required")     
+        print("Maintenance required")
         eventsData = jsonify([{}])
     for event in eventsData:
         print(event)
@@ -376,71 +416,74 @@ def article1(year,id1):
             sendEvent = event
             break
     # return "Hello world"
-    return render_template('article.html',event=sendEvent)
+    return render_template('article.html', event=sendEvent)
 
 
-
-@app.route('/edit_post/<string:id>/<string:timestamp>',methods=['GET','POST'])
+@app.route('/edit_post/<string:id>/<string:timestamp>', methods=['GET', 'POST'])
 @is_logged_in
-def edit_article(id,timestamp):
+def edit_article(id, timestamp):
 
     form = ArticleForm(request.form)
-    #Gets what the user edited basically.
+    # Gets what the user edited basically.
 
     article = db.collection(u'Events').document(timestamp).get()
     article = article.to_dict()
-    if request.method == 'GET':    
+    if request.method == 'GET':
         form.title.data = article['title']
         form.body.data = article['body']
         form.image_url.data = article['image_url']
         form.venue.data = article['venue']
-        
+
     if request.method == 'POST':
-        
+
         title = form.title.data
         body = form.body.data
         image_url = form.image_url.data
         venue = form.venue.data
-        idparam1 = title.replace(" ","")
+        idparam1 = title.replace(" ", "")
         date = article['date']
         time = article['time']
         id1 = idparam1+"-"+date
 
         print(body)
 
-        try: 
-            pdfkit.from_string(body,'genReport.pdf')
-            pdfkit.from_string(body,'genReport.docx')
-            report =  str(title)+"-"+str(date)
+        try:
+            pdfkit.from_string(body, 'genReport.pdf')
+            pdfkit.from_string(body, 'genReport.docx')
+            report = str(title)+"-"+str(date)
             storage.child('reportsPdf/{}'.format(report)).put('genReport.pdf')
-            storage.child('reportsDocx/{}'.format(report)).put('genReport.docx')
-            pdf_url = storage.child('reportsPdf/{}'.format(report)).get_url(None)
-            docx_url = storage.child('reportsDocx/{}'.format(report)).get_url(None)
+            storage.child('reportsDocx/{}'.format(report)
+                          ).put('genReport.docx')
+            pdf_url = storage.child(
+                'reportsPdf/{}'.format(report)).get_url(None)
+            docx_url = storage.child(
+                'reportsDocx/{}'.format(report)).get_url(None)
         except:
             pdf_url = ""
             docx_url = ""
 
         eventData = {
-            "title":title,
-            "date":date,
-            "id":id1,
-            "timestamp":timestamp,
-            "time":time,
-            "image_url":image_url,
-            "venue":venue,
-            "body":body,
-            "pdf_url":pdf_url,
-            "docx_url":docx_url
+            "title": title,
+            "date": date,
+            "id": id1,
+            "timestamp": timestamp,
+            "time": time,
+            "image_url": image_url,
+            "venue": venue,
+            "body": body,
+            "pdf_url": pdf_url,
+            "docx_url": docx_url
         }
 
         res = events.document(timestamp).set(eventData)
         data = {
-            "message":"event_updated(This will return previous timestamp only",
+            "message": "event_updated(This will return previous timestamp only",
             "timestamp": timestamp
         }
         return redirect(url_for('dashboard'))
 
-    return render_template('edit_article.html',form=form)
+    return render_template('edit_article.html', form=form)
+
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_image():
@@ -459,29 +502,33 @@ def upload_image():
         for i in range(len(images)):
             image_name = str(images[i]).split()[1].strip("'")
             print("Uploading image %d" % i)
-            storage.child('images/{}'.format(name + "/" + image_name)).put(images[i])
-            links.append(storage.child('images/{}'.format(name + "/" + image_name)).get_url(None))
+            storage.child('images/{}'.format(name + "/" +
+                                             image_name)).put(images[i])
+            links.append(storage.child(
+                'images/{}'.format(name + "/" + image_name)).get_url(None))
         json = {'urls': tuple(i for i in links)}
         urlArr = [i for i in links]
         db1.child('image_urls').child(name + " " + date).set(urlArr)
-        
+
         return redirect('/dashboard')
 
-@app.route('/gallery',methods=['GET'])
+
+@app.route('/gallery', methods=['GET'])
 def showImages():
     allData = db1.child('image_urls').get().val()
     eventUrls = []
     eventName = []
     eventDate = []
-    for event,urls in allData.items():
+    for event, urls in allData.items():
         x = len(event)
         eventName.append(event[:-10])
         eventDate.append(event[-10:])
         eventUrls.append(urls)
         print(urls)
-    return render_template('gallery.html',eventDate=eventDate,eventName=eventName,eventUrls=eventUrls)
+    return render_template('gallery.html', eventDate=eventDate, eventName=eventName, eventUrls=eventUrls)
 
-@app.route('/search',methods=['GET','POST'])
+
+@app.route('/search', methods=['GET', 'POST'])
 def search():
     if request.method == 'GET':
         today = date.today()
@@ -493,7 +540,7 @@ def search():
         d1 = today.strftime("%d/%m/%Y")
         d1 = d1[6:10]
         name = request.form['search']
-        name = name.replace(" ","")
+        name = name.replace(" ", "")
         name = name.lower()
         eventsData1 = db.collection(u'Events').stream()
         eventArr = []
@@ -501,23 +548,25 @@ def search():
         for event in eventsData1:
             temp = event.to_dict()
             eventArr.append(temp)
-            titleArr.append(temp['title'].replace(" ","").lower())
+            titleArr.append(temp['title'].replace(" ", "").lower())
 
         docValues = []
         searchValues = []
         yearValues = []
-        for i in range(0,len(titleArr)):
+        for i in range(0, len(titleArr)):
             if name in titleArr[i]:
                 docValues.append(i)
                 searchValues.append(eventArr[i])
                 yearValues.append(eventArr[i]['date'][0:4])
         print(yearValues)
-        values = zip(searchValues,yearValues)
-    return render_template('search.html',searchValues=searchValues,eventValues=values,d1=d1) 
+        values = zip(searchValues, yearValues)
+    return render_template('search.html', searchValues=searchValues, eventValues=values, d1=d1)
 
-@app.errorhandler(404)  
-def not_found(e):  
-  return render_template("404.html") 
+
+@app.errorhandler(404)
+def not_found(e):
+    return render_template("404.html")
+
 
 app.config['SECRET_KEY'] = 'dscrit'
 

@@ -1,0 +1,51 @@
+{% include './includes/_navbar.html' %}
+
+<head>
+    <link href="{{url_for('static' , filename='css/blog_styles.css')}}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+
+<body>
+<!-- Page Header-->
+{% if post|length > 0 %}
+{% for thisPost in post %}
+<header class="masthead" style="background-image: url({{thisPost.image}})">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="post-heading">
+                    <h1>{{thisPost.title|safe}}</h1>
+                    <h2 class="subheading">{{thisPost.subtitle}}</h2>
+                    <span class="meta">
+                        Posted by
+                        <a href="#!">{{thisPost.author}}</a>
+                        on {{thisPost.date}}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Post Content-->
+<article class="mb-4">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                {{thisPost.blogContent|safe}}
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</article>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="{{url_for('static' , filename='js/scripts.js')}}"></script>
+
+</body>
+
+{% include './includes/footer.html' %}
