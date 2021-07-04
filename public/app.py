@@ -107,6 +107,18 @@ class UpcomingForm(Form):
         'EventUrl', [validators.URL(require_tld=False, message=None)])
 
 
+class Blog(Form):
+
+    title = StringField('Title', [validators.length(min=1, max=50)])
+    imageName = StringField('Name', [validators.length(min=1, max=150)])
+    subtitle = StringField('SubTitle', [validators.length(min=1, max=150)])
+    date = DateField('Date', format='%Y-%m-%d')
+    author = StringField('Author', [validators.length(min=1, max=50)])
+    content = TextAreaField('BlogContent', [validators.length(min=30)])
+    imageUrl = StringField(
+        'ImageUrl', [validators.URL(require_tld=False, message=None)])
+
+
 # Blog Page
 @app.route('/blogs')
 def blogs():
@@ -129,6 +141,56 @@ def post(post_id):
         postArr.append(post.to_dict())
 
     return render_template('blog_post.html', post=postArr)
+
+# Add blog post
+
+
+@app.route('/add_blog_post', methods=['POST', 'GET'])
+def addPost():
+    form = Blog(request.form)
+    if request.method == 'POST':
+        now = datetime.now()
+        timestamp = now.strftime("%d-%m-%Y--%H:%M:%S")
+
+        title = form.title.data
+        subtitle = form.subtitle.data
+        author = form.author.data
+        blogContent = form.content.data
+        image = form.imageUrl.data
+        dateTime = datetime.now()
+        id1 = str(uuid.uuid4())
+
+        data = {"id": id1, 'title': title, 'subtitle': subtitle, "image": image,
+                'author': author, 'blogContent': blogContent, 'date': dateTime.strftime("%m/%d/%Y"), "timestamp": timestamp}
+        db.collection('blogs').document(id1).set(data)
+        return redirect('/')
+    else:
+        return render_template('add_blog_post.html', form=form)
+
+# Edit Blog post
+
+
+@app.route('/edit_blog_post/<string:post_id>', methods=['GET', 'POST'])
+def editPost(post_id):
+    if request.method == 'GET':
+        posts = db.collection('blogs').where("id", "==", post_id).get()
+        postArr = []
+        for post in posts:
+            postArr.append(post.to_dict())
+        return render_template('edit_blog_post.html', post=postArr)
+    else:
+        form = Blog(request.form)
+    if request.method == 'POST':
+        title = form.title.data
+        subtitle = form.subtitle.data
+        author = form.author.data
+        blogContent = form.content.data
+        image = form.imageUrl.data
+
+        data = {'title': title, 'subtitle': subtitle, "image": image,
+                'author': author, 'blogContent': blogContent}
+        db.collection('blogs').document(post_id).update(data)
+        return redirect('/')
 
 # This route is regarding the event posting.
 
