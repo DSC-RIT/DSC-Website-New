@@ -112,7 +112,7 @@
         {% endif %}
     </table>
 
-<!-- Blogs -->
+<!-- Blog Section -->
 
 <div class="workshops-type-switch">
     <ul class="nav nav-pills justify-content-center js-tabs">
@@ -124,7 +124,7 @@
 </div>
 <table class="table table-striped">
     <tr>
-        <th>ID</th>
+        <th>Topic</th>
         <th>Title</th>
         <th>Date</th>
         <th>Edit</th>
@@ -133,7 +133,7 @@
     {% if blogs|length > 0 %}
     {% for blog in blogs %}
     <tr>
-        <td>{{blog.id}}</td>
+        <td>{{blog.topic}}</td>
         <td>{{blog.title}}</td>
         <td>{{blog.date}}</td>
         <td><a href="edit_blog_post/{{blog.id}}" class="btn btn-info pull-right">Edit</a></td>

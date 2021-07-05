@@ -1,18 +1,7 @@
 {% include './includes/_navbar.html' %}
-<head>
-    <link href="{{url_for('static' , filename='css/blog_styles.css')}}" rel="stylesheet" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-</head>
+
 <body>
     <style>
-        .carousel-item {
-            height: 25rem;
-            color: white;
-            position: relative;
-            background-size: cover;
-            background-position: center;
-        }
 
         .containers {
             position: absolute;
@@ -20,6 +9,7 @@
             bottom: 0;
             right: 0;
             padding: 50px;
+            
         }
     </style>
 
@@ -42,7 +32,7 @@
                     <div class="containers">
 
                         <h1>{{post.title}}</h1>
-                        <p>{{post.subtitle}}</p>
+                        <p >{{post.subtitle}}</p>
                         <a  href="{{url_for('post',post_id=post.id)}}"  class=" btn btn-primary">Read more</a>
 
                     </div>
@@ -54,14 +44,14 @@
             {% endif %}
 
         </div>
-        <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+        <!-- <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
         </a>
         <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
-        </a>
+        </a> -->
     </div>
 
 
@@ -79,21 +69,21 @@
                     <div class="post-preview">
 
                         <h2 class="post-title">{{blog.title}}</h2>
-                        <h3 class="post-subtitle">{{ blog.subtitle}}</h3>
+                        <h3 class="post-subtitle text-muted" >{{ blog.subtitle}}</h3>
                 </a>
                 <p class="post-meta">
                     Posted by
-                    <a href="#!">{{blog.author}}</a>
-                   
+                    <a href="#!" style="text-decoration: none;">{{blog.author}}</a>
+                   in {{blog.topic}}
 
                 </p>
             </div>
             <hr class="my-4" />
             {% endfor %}
             {% endif %}
-            <!-- Divider-->
+           
 
-            <!-- Pager-->
+            <!-- Pagination-->
             <!-- <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="#!">Older Posts
                     →</a></div> -->
         </div>

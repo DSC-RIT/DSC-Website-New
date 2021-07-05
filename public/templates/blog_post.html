@@ -1,25 +1,21 @@
 {% include './includes/_navbar.html' %}
 
-<head>
-    <link href="{{url_for('static' , filename='css/blog_styles.css')}}" rel="stylesheet" />
-   
-</head>
 
 <body>
 <!-- Page Header-->
 {% if post|length > 0 %}
 {% for thisPost in post %}
-<header class="masthead" style="background-image: url({{thisPost.image}})">
+<header class="masthead" style="background-image: url({{thisPost.image}}) ;background-size:cover; height: 25rem;">
     <div class="container position-relative px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
 
             <div class="col-md-10 col-lg-8 col-xl-7">
-                <div class="post-heading">
+                <div class="post-heading" style="color: #fff; padding-top: 35px;">
                     <h1>{{thisPost.title|safe}}</h1>
                     <h2 class="subheading">{{thisPost.subtitle}}</h2>
                     <span class="meta">
                         Posted by
-                        <a href="#!">{{thisPost.author}}</a>
+                        <a href="#!" style="color:#fff;text-decoration: none;">{{thisPost.author}}</a>
                         on {{thisPost.date}}
                     </span>
                 </div>
@@ -28,7 +24,7 @@
     </div>
 </header>
 <!-- Post Content-->
-<article class="mb-4"> 
+<article class="mb-4 mt-4"> 
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-7" style="color: white; ">

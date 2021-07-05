@@ -1,11 +1,5 @@
 {% include './includes/_navbar.html' %}
 
-<head>
-    <link href="{{url_for('static' , filename='css/blog_styles.css')}}" rel="stylesheet" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-</head>
-
 <body>
 <h2 style="text-align: center; color: white;">Add blog post</h2>
 <hr >
@@ -41,6 +35,16 @@
                 </div>
                 <div class="control-group">
                     <div class="form-group col-xs-12 floating-label-form-group controls">
+                        <label>Topic:</label>
+                        <input type="text" class="form-control" placeholder="UI/UX, Web Development, App Development, Career Advice" name="topic" id="topic" required
+                            data-validation-required-message="Please enter topic.">
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+
+
+                <div class="control-group">
+                    <div class="form-group col-xs-12 floating-label-form-group controls">
                         <label>Image-Url</label>
                         <input type="text" class="form-control" placeholder="background image url" name="imageUrl"
                             id="imageUrl" required data-validation-required-message="Please enter ">
@@ -67,11 +71,25 @@
 
     <hr>
 
+<h2 style="text-align: center; color: white;">Instructions to add blogs:</h2>
+<p style="margin: 10px;" >
+    
+## Every Paragraph should be in <code>p</code>  tag.
+<br>
+## for Heading use <code>h2</code> tag with <code>class='section-heading'</code>
+<br>
+## For qoute style use <code>blockquote</code> with <code>class="blockquote"</code>
+<br>
+## for any image add <code>class="img-fluid" </code> to make it responsive.
+<br>
+## <code>span</code> tag can be used as description for image with <code>class="caption text-muted"</code>.
+<br>
+## You can also embed codepens by copy pasting the code from codepen dashboard.
+<br>
+## For list use <code>h2</code>for heading with <code>class='section-heading'</code> and <code>ol , li</code> as used in html.
+</p>
 
-        
-  
-
-
+<hr >
     <!-- Core theme JS-->
 
     <script src="https://rawgit.com/jackmoore/autosize/master/dist/autosize.min.js"></script>

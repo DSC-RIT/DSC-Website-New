@@ -8,22 +8,13 @@ import pdfkit
 import uuid
 import datetime
 from functools import wraps
+from configFile import *
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators, DateField
 from datetime import datetime, date
 import pyrebase
 import os
 app = Flask(__name__)
 cred = credentials.Certificate('key.json')
-
-config = {
-    "apiKey": "AIzaSyAng2bGV9NbgpfizH_2dak0bYgF54YB7jE",
-    "authDomain": "celestial-math-256613.firebaseapp.com",
-    "databaseURL": "https://celestial-math-256613.firebaseio.com",
-    "projectId": "celestial-math-256613",
-    "storageBucket": "celestial-math-256613.appspot.com",
-    "messagingSenderId": "520023954006",
-    "appId": "1:520023954006:web:944be6f107f3432404a1f7"
-}
 
 
 default_app = initialize_app(cred)
@@ -71,7 +62,7 @@ def index():
         print(d1)
         upcomingArr.append(doc.to_dict())
         print(doc.to_dict())
-    return render_template('index.html', upcomingEvents=upcomingArr)
+    return render_template('index.html', upcomingEvents=upcomingArr, d1=d1)
 
 
 @app.route('/team')
@@ -114,6 +105,7 @@ class Blog(Form):
     subtitle = StringField('SubTitle', [validators.length(min=1, max=150)])
     date = DateField('Date', format='%Y-%m-%d')
     author = StringField('Author', [validators.length(min=1, max=50)])
+    topic = StringField('Topic', [validators.length(min=1, max=50)])
     content = TextAreaField('BlogContent', [validators.length(min=30)])
     imageUrl = StringField(
         'ImageUrl', [validators.URL(require_tld=False, message=None)])
@@ -146,6 +138,7 @@ def post(post_id):
 
 
 @app.route('/add_blog_post', methods=['POST', 'GET'])
+@is_logged_in
 def addPost():
     form = Blog(request.form)
     if request.method == 'POST':
@@ -157,13 +150,14 @@ def addPost():
         author = form.author.data
         blogContent = form.content.data
         image = form.imageUrl.data
+        topic = form.topic.data
         dateTime = datetime.now()
         id1 = str(uuid.uuid4())
 
-        data = {"id": id1, 'title': title, 'subtitle': subtitle, "image": image,
+        data = {"id": id1, 'title': title, 'subtitle': subtitle, "image": image, "topic": topic,
                 'author': author, 'blogContent': blogContent, 'date': dateTime.strftime("%m/%d/%Y"), "timestamp": timestamp}
         db.collection('blogs').document(id1).set(data)
-        return redirect('/')
+        return redirect('/blogs')
     else:
         return render_template('add_blog_post.html', form=form)
 
@@ -171,6 +165,7 @@ def addPost():
 
 
 @app.route('/edit_blog_post/<string:post_id>', methods=['GET', 'POST'])
+@is_logged_in
 def editPost(post_id):
     if request.method == 'GET':
         posts = db.collection('blogs').where("id", "==", post_id).get()
@@ -186,11 +181,12 @@ def editPost(post_id):
         author = form.author.data
         blogContent = form.content.data
         image = form.imageUrl.data
+        topic = form.topic.data
 
         data = {'title': title, 'subtitle': subtitle, "image": image,
-                'author': author, 'blogContent': blogContent}
+                'author': author, 'blogContent': blogContent, "topic": topic}
         db.collection('blogs').document(post_id).update(data)
-        return redirect('/')
+        return redirect('/dashboard')
 
 
 # Delete blog Post
