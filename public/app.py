@@ -62,7 +62,7 @@ def index():
         print(d1)
         upcomingArr.append(doc.to_dict())
         print(doc.to_dict())
-    return render_template('index.html', upcomingEvents=upcomingArr)
+    return render_template('index.html', upcomingEvents=upcomingArr, d1=d1)
 
 
 @app.route('/team')
