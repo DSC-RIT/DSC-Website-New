@@ -1,0 +1,113 @@
+{% include './includes/_navbar.html' %}
+
+
+<body>
+<h2 style="text-align: center; color: white;">Edit blog post</h2>
+
+{% if post|length > 0 %}
+{% for thisPost in post %}
+<!-- Main Content -->
+<div style="color:white" class="container">
+    <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            <form name="addForm" id="addForm" method="POST" action="{{url_for('editPost',post_id=thisPost.id)}}"
+                novalidate>
+                <div class="control-group">
+                    <div class="form-group floating-label-form-group controls">
+                        <label>Title</label>
+                        <input type="text" class="form-control" placeholder="Title" name="title" id="title" required
+                            data-validation-required-message="Please enter a title." value="{{thisPost.title}}">
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="form-group floating-label-form-group controls">
+                        <label>Subtitle</label>
+                        <input type="text" class="form-control" placeholder="Subtitle" name="subtitle" id="subtitle"
+                            required data-validation-required-message="Please enter subtitle."
+                            value="{{thisPost.subtitle}}">
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="form-group col-xs-12 floating-label-form-group controls">
+                        <label>Author</label>
+                        <input type="text" class="form-control" placeholder="Author" name="author" id="author" required
+                            data-validation-required-message="Please enter author name." value="{{thisPost.author}}">
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="form-group col-xs-12 floating-label-form-group controls">
+                        <label>Topic:</label>
+                        <input type="text" class="form-control" placeholder="UI/UX, Web Development, App Development, Career Advice"
+                            name="topic" id="topic" value="{{thisPost.topic}}" required data-validation-required-message="Please enter topic.">
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+
+
+                <div class="control-group">
+                    <div class="form-group col-xs-12 floating-label-form-group controls">
+                        <label>Image-Url</label>
+                        <input type="text" class="form-control" placeholder="background image url" name="imageUrl"
+                            id="imageUrl" required data-validation-required-message="Please enter ImageUrl"
+                            value="{{thisPost.image}}">
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="form-group floating-label-form-group controls">
+                        <label>Blog Content</label>
+                        <textarea rows="5" class="form-control" placeholder="Blog content" name="content" id="content"
+                            required
+                            data-validation-required-message="Please enter blog content.">{{thisPost.blogContent}}</textarea>
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <br>
+                <div id="success"></div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" id="sendMessageButton">Send Blog</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <hr>
+    <h2 style="text-align: center; color: white;">Instructions to Edit blogs:</h2>
+    <p style="margin: 10px;">
+    
+        ## Every Paragraph should be in <code>p</code> tag.
+        <br>
+        ## for Heading use <code>h2</code> tag with <code>class='section-heading'</code>
+        <br>
+        ## For qoute style use <code>blockquote</code> with <code>class="blockquote"</code>
+        <br>
+        ## for any image add <code>class="img-fluid" </code> to make it responsive.
+        <br>
+        ## <code>span</code> tag can be used as description for image with <code>class="caption text-muted"</code>.
+        <br>
+        ## You can also embed codepens by copy pasting the code from codepen dashboard.
+        <br>
+        ## For list use <code>h2</code>for heading with <code>class='section-heading'</code> and <code>ol , li</code> as
+        used in html.
+    </p>
+    
+    <hr>
+    {% endfor %}
+    {% endif %}
+
+
+
+
+
+    <!-- Core theme JS-->
+    <script src="https://rawgit.com/jackmoore/autosize/master/dist/autosize.min.js"></script>
+    <script>autosize(document.getElementById("content"))</script>
+    <script src="{{url_for('static' , filename='js/scripts.js')}}"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+
+
+</body>
+
+{% include './includes/footer.html' %}

@@ -22,6 +22,7 @@
     <a class="btn btn-success" href="/add_article" style="margin-right:9px ">Add article</a>
     <a class="btn btn-success" href="/upload" style="margin-right:9px">Add Photos</a>
     <a class="btn btn-success" href="/add_upcoming_event" style="margin-right:9px ">Add Upcoming Events</a>
+    <a class="btn btn-success" href="/add_blog_post" style="margin-right:9px ">Add Blog</a>
     <a class="btn btn-success" href="/logout">Logout</a>
     </div>
             <div class="tab-content">
@@ -110,6 +111,56 @@
         <td></td>
         {% endif %}
     </table>
+
+<!-- Blog Section -->
+
+<div class="workshops-type-switch">
+    <ul class="nav nav-pills justify-content-center js-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" href="#upcoming">All Blogs</a><br />
+        </li>
+        <br />
+    </ul>
+</div>
+<table class="table table-striped">
+    <tr>
+        <th>Topic</th>
+        <th>Title</th>
+        <th>Date</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    {% if blogs|length > 0 %}
+    {% for blog in blogs %}
+    <tr>
+        <td>{{blog.topic}}</td>
+        <td>{{blog.title}}</td>
+        <td>{{blog.date}}</td>
+        <td><a href="edit_blog_post/{{blog.id}}" class="btn btn-info pull-right">Edit</a></td>
+        <td>
+            <form action="{{url_for('delete_blog',id=blog.id)}}" method="post">
+                <input type="submit" value="Delete" class="btn btn-danger">
+            </form>
+        </td>
+    </tr>
+    </tr>
+
+    {% endfor %}
+    {% else %}
+    <td></td>
+    <td></td>
+    <td>
+        <h1 class="a">No Blogs added</h1>
+    </td>
+    <td></td>
+    <td></td>
+    {% endif %}
+</table>
+
+
+
+
+
 {% endblock %}
 {% include './includes/footer.html' %}
 
